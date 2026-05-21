@@ -1,0 +1,177 @@
+#/
+# @license MIT
+#
+# Copyright (c) 2026 Python Data APIs Consortium.
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+#/
+
+# Files #
+#########
+
+
+# Directories #
+###############
+reports/
+build/
+tmp/
+/downloads/
+
+# Compiled source #
+###################
+*.com
+*.class
+*.dll
+*.o
+*.so
+*.slo
+*.lo
+*.obj
+*.dylib
+*.lai
+*.la
+*.a
+*.lib
+*.ko
+*.elf
+*.node
+
+# Precompiled headers #
+#######################
+*.gch
+*.pch
+
+# Executables #
+###############
+*.exe
+*.out
+*.app
+
+# Packages #
+############
+# it's better to unpack these files and commit the raw source
+# git has its own built in compression methods
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# Logs and databases #
+######################
+*.log
+*.sql
+*.sqlite
+!/scripts/*.sql
+
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+!icons/
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# Temporary files #
+###################
+*~
+
+# Node.js #
+###########
+/node_modules
+pids
+*.pid
+*.seed
+
+# Matlab #
+##########
+*.asv
+*.mex*
+
+# Fortran #
+###########
+*.mod
+
+# R #
+#####
+.Rhistory
+.Rapp.history
+.Rproj.user/
+
+# Python #
+##########
+__pycache__/
+*.py[cod]
+*$py.class
+
+# TeX #
+#######
+*.aux
+*.lof
+*.log
+*.lot
+*.fls
+*.out
+*.toc
+*.dvi
+*-converted-to.*
+*.bbl
+*.bcf
+*.blg
+*-blx.aux
+*-blx.bib
+*.brf
+*.run.xml
+*.fdb_latexmk
+*.synctex
+*.synctex.gz
+*.synctex.gz(busy)
+*.pdfsync
+*.alg
+*.loa
+acs-*.bib
+*.thm
+*.nav
+*.snm
+*.vrb
+*.acn
+*.acr
+*.glg
+*.glo
+*.gls
+*-concordance.tex
+*.tikz
+*-tikzDictionary
+*.idx
+*.ilg
+*.ind
+*.ist
+
+# Visual Studio #
+#################
+.vscode/
+jsconfig.json
