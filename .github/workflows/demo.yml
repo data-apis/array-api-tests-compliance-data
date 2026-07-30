@@ -79,7 +79,6 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install -r ${GITHUB_WORKSPACE}/array-api-tests/requirements.txt
-          python -m pip install -r requirements.txt
 
       # Install the array library to test:
       - name: 'Install array library'
