@@ -117,7 +117,7 @@ jobs:
           name: 'array-api-compliance.json'
 
           # Specify the path to the file to upload:
-          path: ${GITHUB_WORKSPACE}/array-api-tests/.report.json
+          path: ${{ env.GITHUB_WORKSPACE}}/array-api-tests/.report.json
 
           # Specify the number of days to retain the artifact (default is 90 days)
           retention-days: 45
