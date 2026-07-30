@@ -1,0 +1,118 @@
+#/
+# @license MIT
+#
+# Copyright (c) 2026 Python Data APIs Consortium.
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+#/
+
+# Workflow name:
+name: Demo
+
+# Workflow triggers:
+on:
+  # Allow the workflow to be manually run:
+  workflow_dispatch:
+
+# Global permissions:
+permissions:
+  # Allow read-only access to the repository contents:
+  contents: read
+
+# Workflow jobs:
+jobs:
+
+  # Define a job for running Array API tests...
+  array_api_tests:
+
+    # Define a display name:
+    name: 'Demo Array API Tests'
+
+    # Define the type of virtual host machine:
+    runs-on: ubuntu-latest
+
+    # Define the sequence of job steps...
+    steps:
+
+      # Check out of the test suite repository:
+      - name: 'Checkout Array API test suite repository'
+
+        # Pin action to full length commit SHA:
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+        # Specify repository data:
+        with:
+          repository: data-apis/array-api-tests
+          submodules: 'true'
+          path: array-api-tests
+
+      # Install Python:
+      - name: 'Install Python'
+
+        # Pin action to full length commit SHA:
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+
+        # Specify Python info:
+        with:
+          python-version: '3.14'
+
+        timeout-minutes: 5
+
+      # Install the array library to test:
+      - name: 'Install array library'
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install git+https://github.com/data-apis/array-api-strict.git@main
+          python -m pip install -r requirements.txt
+          python -c'import array_api_strict; print(array_api_strict.__file__)'
+
+      # Run the test suite:
+      - name: 'Run test suite'
+
+        # Set requisite environment variables:
+        env:
+          # Specify the array library name to test:
+          ARRAY_API_TESTS_MODULE: array_api_strict
+
+          ARRAY_API_STRICT_API_VERSION: 2025.12
+
+        # Generate a JSON report:
+        run: |
+          cd ${GITHUB_WORKSPACE}/array-api-tests
+          pytest array_api_tests/ --json-report || true
+
+        timeout-minutes: 360
+
+      # Upload the JSON report:
+      - name: 'Upload test suite results'
+
+        # Pin action to full length commit SHA:
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+
+        with:
+          # Define a name for the uploaded artifact:
+          name: 'array-api-compliance.json'
+
+          # Specify the path to the file to upload:
+          path: "${{ format('{0}/array-api-tests/.report.json', env.GITHUB_WORKSPACE) }}"
+
+          # Specify the number of days to retain the artifact (default is 90 days)
+          retention-days: 45
+
+        timeout-minutes: 10
