@@ -6,7 +6,7 @@
                 "type": "github_artifact",
                 "repository": "https://github.com/data-apis/array-api-tests-compliance-data",
                 "workflow": "demo.yml",
-                "artifact": "array-api-compliance.json"
+                "artifact": "array_api_compliance.json"
             }
         ]
     }
