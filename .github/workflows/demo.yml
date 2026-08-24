@@ -160,7 +160,12 @@ jobs:
               },
               python: $python_version,
               test_suite: $test_suite,
-              data: .
+              data: {
+                duration: .duration,
+                exitcode: .exitcode,
+                summary: .summary,
+                tests: .tests
+              }
             }' \
             .report.json > array_api_compliance.json
 
