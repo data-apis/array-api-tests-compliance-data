@@ -35,6 +35,11 @@ permissions:
   # Allow read-only access to the repository contents:
   contents: read
 
+# Define global environment variables:
+env:
+  ARRAY_LIBRARY: 'array-api-strict'
+  ARRAY_API_STRICT_API_VERSION: 2025.12
+
 # Workflow jobs:
 jobs:
 
@@ -85,7 +90,7 @@ jobs:
       # Install the array library to test:
       - name: 'Install array library'
         run: |
-          python -m pip install git+https://github.com/data-apis/array-api-strict.git@main
+          python -m pip install array-api-strict
 
         timeout-minutes: 10
 
@@ -95,9 +100,7 @@ jobs:
         # Set requisite environment variables:
         env:
           # Specify the array library name to test:
-          ARRAY_API_TESTS_MODULE: array_api_strict
-
-          ARRAY_API_STRICT_API_VERSION: 2025.12
+          ARRAY_API_TESTS_MODULE: ${{ env.ARRAY_LIBRARY }}
 
         # Generate a JSON report:
         run: |
@@ -105,6 +108,16 @@ jobs:
           pytest array_api_tests/ --json-report || true
 
         timeout-minutes: 360
+
+      # Add meta data to report:
+      - name: 'Add meta data'
+        id: test-suite-results
+        run: |
+          cd ${GITHUB_WORKSPACE}/array-api-tests
+          results=`cat ./.report.json`
+          platform=`jq .environment.Platform $results`
+          python_version=`jq .environment.Python $results`
+          data='{ "schema": "v1", "name": "${{ env.ARRAY_LIBRARY }}", "version": "${{ inputs.array-library-version }}", "timestamp": ${{ github.event.release.created_at }}, "platform": "$platform", "python": $python_version, "data": ${{ steps.test-suite-results.outputs.results }}, "test_suite": "..." }'
 
       # Upload the JSON report:
       - name: 'Upload test suite results'
@@ -119,7 +132,10 @@ jobs:
           # Specify the path to the file to upload:
           path: ${{ github.workspace }}/array-api-tests/.report.json
 
-          # Specify the number of days to retain the artifact (default is 90 days)
+          # Specify what should happen if files are found to upload:
+          if-no-files-found: error
+
+          # Specify the number of days to retain the artifact (default is 90 days):
           retention-days: 45
 
         timeout-minutes: 10
