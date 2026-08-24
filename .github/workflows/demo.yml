@@ -38,7 +38,8 @@ permissions:
 # Define global environment variables:
 env:
   ARRAY_LIBRARY: 'array-api-strict'
-  ARRAY_API_STRICT_API_VERSION: 2025.12
+  ARRAY_LIBRARY_MODULE: 'array_api_strict'
+  ARRAY_API_VERSION: 2025.12
 
 # Workflow jobs:
 jobs:
@@ -90,7 +91,7 @@ jobs:
       # Install the array library to test:
       - name: 'Install array library'
         run: |
-          python -m pip install array-api-strict
+          python -m pip install ${{ env.ARRAY_LIBRARY }}
 
         timeout-minutes: 10
 
@@ -100,7 +101,10 @@ jobs:
         # Set requisite environment variables:
         env:
           # Specify the array library name to test:
-          ARRAY_API_TESTS_MODULE: ${{ env.ARRAY_LIBRARY }}
+          ARRAY_API_TESTS_MODULE: ${{ env.ARRAY_LIBRARY_MODULE }}
+
+          # Specify the array API version to test against:
+          ARRAY_API_TESTS_VERSION: ${{ env.ARRAY_API_VERSION }}
 
         # Generate a JSON report:
         run: |
@@ -114,10 +118,22 @@ jobs:
         id: test-suite-results
         run: |
           cd ${GITHUB_WORKSPACE}/array-api-tests
-          results=`cat ./.report.json`
-          platform=`jq .environment.Platform $results`
-          python_version=`jq .environment.Python $results`
-          data='{ "schema": "v1", "name": "${{ env.ARRAY_LIBRARY }}", "version": "${{ inputs.array-library-version }}", "timestamp": ${{ github.event.release.created_at }}, "platform": "$platform", "python": $python_version, "data": ${{ steps.test-suite-results.outputs.results }}, "test_suite": "..." }'
+          jq \
+            --arg schema 'v1' \
+            --arg name '${{ env.ARRAY_LIBRARY }}' \
+            --arg version '${{ env.ARRAY_API_VERSION }}' \
+            --arg timestamp "$(date --utc +'%Y-%m-%dT%H:%M:%SZ')" \
+            --arg test_suite '...' \
+            '{
+              schema: $schema,
+              version: $version,
+              timestamp: $timestamp,
+              platform: .environment.Platform,
+              python: .environment.Python,
+              data: .,
+              test_suite: $test_suite
+            }' \
+            .report.json > array_api_compliance.json
 
       # Upload the JSON report:
       - name: 'Upload test suite results'
@@ -127,10 +143,10 @@ jobs:
 
         with:
           # Define a name for the uploaded artifact:
-          name: 'array-api-compliance.json'
+          name: 'array_api_compliance.json'
 
           # Specify the path to the file to upload:
-          path: ${{ github.workspace }}/array-api-tests/.report.json
+          path: ${{ github.workspace }}/array-api-tests/array_api_compliance.json
 
           # Specify what should happen if files are found to upload:
           if-no-files-found: error
