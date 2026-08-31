@@ -1,0 +1,21 @@
+---
+layout: layouts/base.njk
+title: Results
+permalink: /
+---
+{% if dashboard.hasReports %}
+	{% set selectedLibrary = dashboard.defaultLibrary %}
+	{% set selectedLibraryId = selectedLibrary.id %}
+	{% set selectedLibraryName = selectedLibrary.name %}
+	{% set selectedContext = selectedLibrary.defaultContext %}
+	{% include "partials/dashboard_content.njk" %}
+{% else %}
+<main class="single-page" id="main-content">
+	<h1>Results</h1>
+	{% if dashboard.libraries.length %}
+	<p class="lede">No compliance reports have been harvested yet.</p>
+	{% else %}
+	<p class="lede">No libraries are registered yet.</p>
+	{% endif %}
+</main>
+{% endif %}

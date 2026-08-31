@@ -1,0 +1,14 @@
+{% if selectedLibrary.contexts.length > 1 %}
+<details class="context-picker">
+	<summary>{{ selectedContext.shortLabel }}</summary>
+	<nav aria-label="Execution contexts">
+		<ul>
+		{% for context in selectedLibrary.contexts %}
+			<li><a href="{{ context.path | url }}"{% if isSeriesRoute and context.path == selectedContext.path %} aria-current="page"{% endif %}>{{ context.label }}</a></li>
+		{% endfor %}
+		</ul>
+	</nav>
+</details>
+{% else %}
+<p class="context-label">{{ selectedContext.shortLabel }}</p>
+{% endif %}

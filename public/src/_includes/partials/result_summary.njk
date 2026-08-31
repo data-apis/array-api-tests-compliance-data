@@ -1,0 +1,21 @@
+<section class="result-summary" aria-labelledby="library-result-title">
+	<div class="result-summary__heading">
+		<div>
+			<h2 id="library-result-title">{{ selectedLibrary.name }} <span>{{ selectedContext.current.version }}</span></h2>
+		</div>
+	</div>
+	<div class="score-row">
+		<p class="score">{{ selectedContext.current.resultText }}</p>
+		{% if selectedContext.current.passPercentageText %}<p class="percentage">{{ selectedContext.current.passPercentageText }}</p>{% endif %}
+	</div>
+	{% set run = selectedContext.current %}
+	{% include "partials/outcome_bar.njk" %}
+	<ul class="context-facts" aria-label="Execution context">
+		<li>Array API {{ selectedContext.current.apiVersion }}</li>
+		<li>Python {{ selectedContext.current.python }}</li>
+		<li>{{ selectedContext.current.platform.system }} {{ selectedContext.current.platform.release }} {{ selectedContext.current.platform.machine }}</li>
+		<li>{{ selectedContext.current.executionTarget.full }}</li>
+		<li>Source {{ selectedContext.sourceName }}</li>
+		<li class="context-facts__wide">Platform {{ selectedContext.current.platform.description }}</li>
+	</ul>
+</section>

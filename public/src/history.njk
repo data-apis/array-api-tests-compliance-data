@@ -1,0 +1,33 @@
+---
+layout: layouts/base.njk
+pagination:
+  data: dashboard.contexts
+  size: 1
+  alias: selectedContext
+permalink: "{{ selectedContext.historyUrl }}"
+eleventyComputed:
+  title: "{{ selectedContext.libraryName }} history"
+---
+{% set selectedLibraryId = selectedContext.libraryId %}
+{% set selectedLibraryName = selectedContext.libraryName %}
+<main class="dashboard-shell" id="main-content">
+	{% include "partials/library_navigation.njk" %}
+	<article class="supporting-page">
+		<a class="back-link" href="{{ selectedContext.path | url }}">Back to results</a>
+		<p class="eyebrow">{{ selectedContext.label }}</p>
+		<h1>Run history</h1>
+		<p class="lede">Every harvested run in this indexed series, newest first. A new test-suite revision begins a separate comparison epoch.</p>
+		<ol class="history-list">
+		{% for run in selectedContext.history %}
+			<li>
+				{% if run.startsEpoch %}<p class="epoch-label">Test suite {{ run.suite | truncate(12, true, '') }}</p>{% endif %}
+				<div class="history-run">
+					<div><time datetime="{{ run.timestamp }}">{{ run.dateLong }}</time><small>{{ run.environment }}</small></div>
+					<strong>{{ run.resultText }}</strong>
+					{% if run.passPercentageText %}<span>{{ run.passPercentageText }}</span>{% endif %}
+				</div>
+			</li>
+		{% endfor %}
+		</ol>
+	</article>
+</main>

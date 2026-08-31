@@ -1,0 +1,11 @@
+<header class="site-header">
+	<div class="site-header__inner">
+		<a class="wordmark" href="{{ '/' | url }}">Array API Compliance</a>
+		<nav class="top-nav" aria-label="Primary navigation">
+			<a href="{{ '/about/' | url }}">About</a>
+			{% if dashboard.updated %}
+			<span class="updated">Updated <time datetime="{{ dashboard.updated.timestamp }}">{{ dashboard.updated.date }}</time></span>
+			{% endif %}
+		</nav>
+	</div>
+</header>

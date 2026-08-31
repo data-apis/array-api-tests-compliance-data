@@ -1,0 +1,15 @@
+---
+layout: layouts/base.njk
+pagination:
+  data: dashboard.contexts
+  size: 1
+  alias: selectedContext
+permalink: "{{ selectedContext.path }}"
+eleventyComputed:
+  title: "{{ selectedContext.libraryName }} results"
+---
+{% set selectedLibrary = dashboard.libraryById[selectedContext.libraryId] %}
+{% set selectedLibraryId = selectedContext.libraryId %}
+{% set selectedLibraryName = selectedContext.libraryName %}
+{% set isSeriesRoute = true %}
+{% include "partials/dashboard_content.njk" %}

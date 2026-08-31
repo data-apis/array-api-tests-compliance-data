@@ -1,0 +1,10 @@
+<div class="outcome-bar" role="img" aria-label="{{ run.resultText }}">
+	{% for outcome in run.outcomes %}
+	<span class="outcome-bar__segment outcome-bar__segment--{{ outcome.tone }}" style="width: {{ outcome.percentage }}%" aria-hidden="true"></span>
+	{% endfor %}
+</div>
+<ul class="outcome-legend" aria-label="Test outcomes">
+	{% for outcome in run.outcomes %}
+	<li class="outcome-legend__item--{{ outcome.tone }}"><strong>{{ outcome.countText }}</strong> {{ outcome.name }}</li>
+	{% endfor %}
+</ul>

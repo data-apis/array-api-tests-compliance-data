@@ -1,0 +1,39 @@
+<section class="comparison" aria-labelledby="comparison-title">
+	<div class="section-heading">
+		<div>
+			<h2 id="comparison-title">Compared with previous run</h2>
+		</div>
+	</div>
+	{% if selectedContext.comparison.available %}
+	<div class="comparison-table">
+		<div class="comparison-row">
+			<time datetime="{{ selectedContext.comparison.previous.timestamp }}">{{ selectedContext.comparison.previous.dateShort }}</time>
+			<div class="comparison-outcomes">
+			{% for outcome in selectedContext.comparison.previous.outcomes %}
+				<span class="outcome-text--{{ outcome.tone }}">{{ outcome.countText }} {{ outcome.label | lower }}</span>
+			{% endfor %}
+			</div>
+		</div>
+		<div class="comparison-row comparison-row--current">
+			<time datetime="{{ selectedContext.comparison.current.timestamp }}">{{ selectedContext.comparison.current.dateShort }}</time>
+			<div class="comparison-outcomes">
+			{% for outcome in selectedContext.comparison.current.outcomes %}
+				<span class="outcome-text--{{ outcome.tone }}">{{ outcome.countText }} {{ outcome.label | lower }}</span>
+			{% endfor %}
+			</div>
+		</div>
+	</div>
+	{% if selectedContext.comparison.headline %}<p class="change-summary">{{ selectedContext.comparison.headline }}</p>{% endif %}
+	{% if selectedContext.comparison.diagnostic %}<p class="notice">{{ selectedContext.comparison.diagnostic }}</p>{% endif %}
+	{% if selectedContext.comparison.environmentChanges.length %}
+	<p class="notice">Environment details changed between these runs:</p>
+	<ul class="environment-changes" aria-label="Environment changes">
+	{% for change in selectedContext.comparison.environmentChanges %}
+		<li><strong>{{ change.label }}:</strong> previous {{ change.previous or "not reported" }}; current {{ change.current or "not reported" }}</li>
+	{% endfor %}
+	</ul>
+	{% endif %}
+	{% else %}
+	<p class="notice">{{ selectedContext.comparison.message }}</p>
+	{% endif %}
+</section>

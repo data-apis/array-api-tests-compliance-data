@@ -1,0 +1,22 @@
+<main class="dashboard-shell" id="main-content">
+	{% include "partials/library_navigation.njk" %}
+	<section class="results-panel">
+		<div class="page-heading">
+			<h1>Results</h1>
+			{% if selectedLibrary.hasReports %}{% include "partials/context_picker.njk" %}{% endif %}
+		</div>
+		{% if selectedLibrary.hasReports %}
+			{% include "partials/result_summary.njk" %}
+			{% include "partials/comparison.njk" %}
+			<div class="result-actions">
+				{% if selectedContext.failuresUrl %}<a href="{{ selectedContext.failuresUrl | url }}">View failed tests</a>{% else %}<span class="success-note">No failed tests</span>{% endif %}
+				<a href="{{ selectedContext.historyUrl | url }}">View full history</a>
+			</div>
+		{% else %}
+		<section class="empty-state">
+			<h2>{{ selectedLibrary.name }}</h2>
+			<p>No reports have been harvested for this library yet.</p>
+		</section>
+		{% endif %}
+	</section>
+</main>

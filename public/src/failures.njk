@@ -1,0 +1,34 @@
+---
+layout: layouts/base.njk
+pagination:
+  data: dashboard.failureContexts
+  size: 1
+  alias: selectedContext
+permalink: "{{ selectedContext.failuresUrl }}"
+eleventyComputed:
+  title: "{{ selectedContext.libraryName }} failed tests"
+---
+{% set selectedLibraryId = selectedContext.libraryId %}
+{% set selectedLibraryName = selectedContext.libraryName %}
+<main class="dashboard-shell" id="main-content">
+	{% include "partials/library_navigation.njk" %}
+	<article class="supporting-page">
+		<a class="back-link" href="{{ selectedContext.path | url }}">Back to results</a>
+		<p class="eyebrow">{{ selectedContext.label }}</p>
+		<h1>Failed tests</h1>
+		<p class="lede">{{ selectedContext.failureCount }} failures in the latest {{ selectedContext.libraryName }} report.</p>
+		<dl class="report-metadata">
+			<div><dt>Run</dt><dd><time datetime="{{ selectedContext.current.timestamp }}">{{ selectedContext.current.dateTime }}</time></dd></div>
+			<div><dt>Library</dt><dd>{{ selectedContext.libraryName }} {{ selectedContext.current.version }}</dd></div>
+			<div><dt>Array API</dt><dd>{{ selectedContext.current.apiVersion }}</dd></div>
+			<div><dt>Environment</dt><dd>{{ selectedContext.current.environment }}</dd></div>
+			<div><dt>Test suite</dt><dd><code>{{ selectedContext.current.suite }}</code></dd></div>
+			<div><dt>Report</dt><dd><code>{{ selectedContext.current.reportSha256 }}</code></dd></div>
+		</dl>
+		<ol class="failure-list">
+		{% for failure in selectedContext.failures %}
+			<li><code>{{ failure.nodeid }}</code><span>{{ failure.outcome }}</span></li>
+		{% endfor %}
+		</ol>
+	</article>
+</main>

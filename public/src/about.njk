@@ -1,0 +1,15 @@
+---
+layout: layouts/base.njk
+title: About
+permalink: /about/
+---
+<main class="single-page prose" id="main-content">
+	<p class="eyebrow">Methodology</p>
+	<h1>About the results</h1>
+	<p>Each report is a library's test run against a revision of the Python Array API test suite. The dashboard summarizes harvested reports; it does not run tests itself.</p>
+	<h2>What counts as comparable?</h2>
+	<p>Two adjacent runs are compared only when they come from the same registered source, the same indexed series, and the same test-suite revision. An indexed series fixes the Array API revision, Python major/minor, operating-system family, machine architecture, and stable execution-target details: kind, backend, and device model. Exact Python and platform details plus the complete execution target—including runtime and driver versions—identify a variant within that series. When adjacent runs use different variants, the dashboard lists the environment changes.</p>
+	<h2>What does missing coverage mean?</h2>
+	<p>A missing library, platform, or execution target means no matching report has been harvested. It is not counted as a failed test. Test totals may also change when the suite revision changes.</p>
+	<p><a href="{{ '/' | url }}">Return to results</a></p>
+</main>

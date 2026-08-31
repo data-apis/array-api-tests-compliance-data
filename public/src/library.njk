@@ -1,0 +1,15 @@
+---
+layout: layouts/base.njk
+pagination:
+  data: dashboard.libraries
+  size: 1
+  alias: selectedLibrary
+permalink: "/libraries/{{ selectedLibrary.id }}/"
+eleventyComputed:
+  title: "{{ selectedLibrary.name }} results"
+---
+{% set selectedLibraryId = selectedLibrary.id %}
+{% set selectedLibraryName = selectedLibrary.name %}
+{% set selectedContext = selectedLibrary.defaultContext %}
+{% set isLibraryOverview = true %}
+{% include "partials/dashboard_content.njk" %}

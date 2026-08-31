@@ -1,0 +1,13 @@
+<nav class="library-list" aria-label="Libraries">
+	<p class="eyebrow">Libraries</p>
+	<ul>
+	{% for item in dashboard.libraries %}
+		<li>
+			<a href="{{ item.url | url }}"{% if item.id == selectedLibraryId %} class="is-selected"{% endif %}{% if item.id == selectedLibraryId and isLibraryOverview %} aria-current="page"{% endif %}>
+				<span>{{ item.name }}</span>
+				{% if not item.hasReports %}<small>No reports yet</small>{% endif %}
+			</a>
+		</li>
+	{% endfor %}
+	</ul>
+</nav>
