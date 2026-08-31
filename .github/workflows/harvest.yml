@@ -59,7 +59,14 @@ jobs:
     # Only run this job on the default repository branch:
     if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
 
-    environment: harvest
+    # Attach an actions environment to ensure credential isolation:
+    environment:
+
+      # Specify the environment name:
+      name: harvest
+
+      # Disable creating a deployment record:
+      deployment: false
 
     # Job permissions:
     permissions:
