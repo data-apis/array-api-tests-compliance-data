@@ -190,7 +190,7 @@ jobs:
           # Specify the path to the file to upload:
           path: ${{ github.workspace }}/array-api-tests/array_api_compliance.json
 
-          # Specify what should happen if files are found to upload:
+          # Specify what should happen if no files are found to upload:
           if-no-files-found: error
 
           # Specify the number of days to retain the artifact (default is 90 days):
