@@ -23,7 +23,7 @@
 #/
 
 # Workflow name:
-name: Harvest compliance reports
+name: harvest_compliance_reports
 
 # Workflow triggers:
 on:

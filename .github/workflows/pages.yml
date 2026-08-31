@@ -22,7 +22,7 @@
 # SOFTWARE.
 #/
 
-name: Build and deploy dashboard
+name: deploy_dashboard
 
 on:
   push:
@@ -31,7 +31,7 @@ on:
   workflow_dispatch:
   workflow_run:
     workflows:
-      - Harvest compliance reports
+      - harvest_compliance_reports
     types:
       - completed
 
