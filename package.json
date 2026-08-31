@@ -6,9 +6,14 @@
     "node": ">=22.2.0"
   },
   "scripts": {
+    "build:dashboard": "eleventy --config=public/eleventy.config.js",
     "harvest": "node scripts/harvest.js",
+    "serve:dashboard": "eleventy --config=public/eleventy.config.js --serve",
     "test": "node --test test/**/*.test.js",
     "validate": "node scripts/validate_repository.js --all"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "3.1.6"
   },
   "dependencies": {
     "@stdlib/array-base-map": "^0.1.1",
