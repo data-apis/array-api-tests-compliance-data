@@ -23,7 +23,7 @@
 #/
 
 # Workflow name:
-name: Demo
+name: demo
 
 # Workflow triggers:
 on:

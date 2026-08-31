@@ -22,7 +22,7 @@
 # SOFTWARE.
 #/
 
-name: Validate harvester and compliance data
+name: validate_compliance_data
 
 on:
   pull_request:
