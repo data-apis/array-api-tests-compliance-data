@@ -68,6 +68,7 @@ async function applyOutput(root, output) {
 test('harvests, validates, and deduplicates a direct report', async function () {
 	var root = await createWorkspace(urlRegistry());
 	var bytes = await fs.readFile('test/fixtures/minimal_report.json');
+	var outputIndex;
 	var first = await runHarvest({
 		rootDirectory: root,
 		now: NOW,
@@ -79,6 +80,10 @@ test('harvests, validates, and deduplicates a direct report', async function () 
 	assert.equal(first.summary.new_records.length, 1);
 	assert.equal(path.basename(first.summary.new_records[0]).includes('-'), false);
 	assert.match(path.basename(first.summary.new_records[0]), /^\d{4}_\d{2}_\d{2}T\d{2}_\d{2}_\d{2}Z__sha256_[0-9a-f]{64}\.json\.gz$/);
+	outputIndex = JSON.parse(await fs.readFile(path.join(first.outputDirectory, 'data/index.json'), 'utf8'));
+
+	assert.deepEqual(outputIndex.records[0].execution_target, { kind: 'cpu' });
+	assert.deepEqual(outputIndex.records[0].series.execution_target, { kind: 'cpu' });
 	await validateOutput({ rootDirectory: root, outputDirectory: first.outputDirectory });
 	await applyOutput(root, first.outputDirectory);
 	await validateRepository({

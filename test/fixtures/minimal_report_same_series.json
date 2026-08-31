@@ -10,6 +10,9 @@
     "release": "test2",
     "machine": "x86_64"
   },
+  "execution_target": {
+    "kind": "cpu"
+  },
   "python": "3.14.8",
   "test_suite": "15b12afc0811fdac80028bc0454d6ca0aefb8102",
   "data": {

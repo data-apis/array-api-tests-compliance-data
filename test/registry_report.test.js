@@ -6,6 +6,7 @@ var fs = require('node:fs');
 var validateRegistry = require('./../lib/node_modules/@data-apis/registry/validate');
 var sourceFingerprint = require('./../lib/node_modules/@data-apis/registry/source-fingerprint');
 var validateReport = require('./../lib/node_modules/@data-apis/report/validate');
+var validatePublishReport = require('./../lib/node_modules/@data-apis/publish/validate-report');
 var urlRegistry = require('./helpers/url_registry.js');
 
 var report = JSON.parse(fs.readFileSync('test/fixtures/minimal_report.json', 'utf8'));
@@ -23,11 +24,35 @@ test('validates dynamic report metadata and derives an immutable series', functi
 
 	assert.equal(result.seriesSchema, 'compliance-v1-series-v1');
 	assert.equal(result.series.python, '3.14');
+	assert.deepEqual(result.series.execution_target, { kind: 'cpu' });
 	assert.equal(result.timestamp, '2026-08-24T10:34:27Z');
 	assert.match(result.seriesKey, /^sha256:[0-9a-f]{64}$/);
 	assert.equal(windowsResult.series.python, '3.15');
 	assert.equal(windowsResult.series.platform.system, 'Windows');
 	assert.notEqual(windowsResult.seriesKey, result.seriesKey);
+});
+
+test('keeps CPU and accelerator runs in distinct series', function () {
+	var cpu = structuredClone(report);
+	var cuda = structuredClone(report);
+	var cpuResult;
+	var cudaResult;
+	var publishResult;
+
+	cuda.execution_target = {
+		kind: 'gpu',
+		backend: 'cuda',
+		device_model: 'NVIDIA H100',
+		runtime_version: '12.8',
+		driver_version: '570.00'
+	};
+	cpuResult = validateReport(cpu);
+	cudaResult = validateReport(cuda);
+	publishResult = validatePublishReport(cuda, 'array-api-strict');
+	assert.deepEqual(cudaResult.series.execution_target, cuda.execution_target);
+	assert.notEqual(cudaResult.seriesKey, cpuResult.seriesKey);
+	assert.deepEqual(publishResult.series, cudaResult.series);
+	assert.equal(publishResult.seriesKey, cudaResult.seriesKey);
 });
 
 test('normalizes equivalent timestamps before hashing and storage', function () {
@@ -79,6 +104,26 @@ test('rejects malformed semantic report data', function () {
 	assert.throws(function validateSummary() {
 		validateReport(value);
 	}, /outcome counts/);
+	value = structuredClone(report);
+	delete value.execution_target;
+	assert.throws(function validateTarget() {
+		validateReport(value);
+	}, /validation failed/);
+	value = structuredClone(report);
+	value.execution_target = { kind: 'gpu' };
+	assert.throws(function validateBackend() {
+		validateReport(value);
+	}, /validation failed/);
+	value = structuredClone(report);
+	value.execution_target = { kind: 'gpu', backend: 'CUDA' };
+	assert.throws(function validateBackendCase() {
+		validateReport(value);
+	}, /validation failed/);
+	value = structuredClone(report);
+	value.execution_target = { kind: 'gpu', backend: 'cuda', device_model: ' H100' };
+	assert.throws(function validateDeviceModel() {
+		validateReport(value);
+	}, /trimmed string/);
 });
 
 test('rejects future timestamps and unsupported report schemas', function () {
