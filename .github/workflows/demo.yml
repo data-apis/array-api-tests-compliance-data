@@ -144,6 +144,7 @@ jobs:
             --arg system "${system}" \
             --arg release "${release}" \
             --arg machine "${machine}" \
+            --arg execution_target 'cpu' \
             --arg python_version "${python_version}" \
             --arg test_suite "${test_suite}" \
             '{
@@ -157,6 +158,9 @@ jobs:
                 system: $system,
                 release: $release,
                 machine: $machine
+              },
+              execution_target: {
+                kind: $execution_target
               },
               python: $python_version,
               test_suite: $test_suite,
