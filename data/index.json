@@ -7,6 +7,8 @@
       "source_fingerprint": "sha256:60e5433590fb86ec2330d2b7b1866cb59b5299776d5410e5b49f1c94a209763b",
       "series_schema": "compliance-v1-series-v1",
       "series_key": "sha256:825a99e02cebb16f439f25d8b634b3f18ab37ec5ce95c857f63500ece3778441",
+      "variant_schema": "compliance-v1-variant-v1",
+      "variant_key": "sha256:ba176962943009191602956364b068118870b857262c34be137bf7ceab56b4bf",
       "origin": {
         "type": "ci_artifact",
         "provider": "github",
@@ -21,6 +23,19 @@
         "platform": {
           "system": "Linux",
           "machine": "x86_64"
+        },
+        "execution_target": {
+          "kind": "cpu"
+        }
+      },
+      "variant": {
+        "api_version": "2025.12",
+        "python": "3.14.7",
+        "platform": {
+          "description": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+          "machine": "x86_64",
+          "release": "6.17.0-1022-azure",
+          "system": "Linux"
         },
         "execution_target": {
           "kind": "cpu"
@@ -56,6 +71,8 @@
       "source_fingerprint": "sha256:60e5433590fb86ec2330d2b7b1866cb59b5299776d5410e5b49f1c94a209763b",
       "series_schema": "compliance-v1-series-v1",
       "series_key": "sha256:825a99e02cebb16f439f25d8b634b3f18ab37ec5ce95c857f63500ece3778441",
+      "variant_schema": "compliance-v1-variant-v1",
+      "variant_key": "sha256:ba176962943009191602956364b068118870b857262c34be137bf7ceab56b4bf",
       "origin": {
         "type": "ci_artifact",
         "provider": "github",
@@ -70,6 +87,19 @@
         "platform": {
           "system": "Linux",
           "machine": "x86_64"
+        },
+        "execution_target": {
+          "kind": "cpu"
+        }
+      },
+      "variant": {
+        "api_version": "2025.12",
+        "python": "3.14.7",
+        "platform": {
+          "description": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+          "machine": "x86_64",
+          "release": "6.17.0-1022-azure",
+          "system": "Linux"
         },
         "execution_target": {
           "kind": "cpu"
