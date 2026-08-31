@@ -146,13 +146,13 @@ Once the raw report is generated, you need to augment the generated JSON with ad
     
     If `kind` is not `cpu`, the following additional field is required:
 
-    -   **backend**: backend name. Must be lowercase.
+    -   **backend**: backend name (e.g., `cuda`, `rocm`, `mps`, `oneapi`, `xla`, `opencl`, etc). Must be lowercase.
     
-    If `kind` is not `cpu`, the following additional fields are optional:
+    The following additional fields are optional:
 
-    -   **device_model**: device model.
-    -   **runtime_version**: runtime version.
-    -   **driver_version**: driver version.
+    -   **device_model**: device model when the device is known and may affect support or behavior (e.g., `NVIDIA H100 80GB HBM3`, `Apple M4 Max GPU`, `Intel Xeon Platinum 8481C`, etc).
+    -   **runtime_version**: runtime version when the user-space execution runtime has a meaningful version (e.g., CUDA runtime `12.8`, ROCm `6.3.1`, oneAPI `2026.0`, etc).
+    -   **driver_version**: driver version when a separate host/device driver is identifiable and relevant (e.g., NVIDIA driver `570.124.06`, Intel Level Zero driver `1.6.32961`, etc).
     
 -   **python**: Python version as returned by `platform.python_version()` (e.g., `3.14.7`).
 
@@ -203,6 +203,56 @@ The following is an example test suite report:
       ...
     ]
   }
+}
+```
+
+#### Execution Targets
+
+The following are example `execution_target` values.
+
+##### CUDA
+
+```json
+{
+  "kind": "gpu",
+  "backend": "cuda",
+  "device_model": "NVIDIA H100 80GB HBM3",
+  "runtime_version": "12.8",
+  "driver_version": "570.124.06"
+}
+```
+
+##### ROCm
+
+```json
+{
+  "kind": "gpu",
+  "backend": "rocm",
+  "device_model": "AMD Instinct MI300X",
+  "runtime_version": "6.3.1"
+}
+```
+
+##### MPS
+
+```json
+{
+  "kind": "gpu",
+  "backend": "mps",
+  "device_model": "Apple M4 Max GPU"
+}
+```
+
+##### CPU
+
+Typically, specifying `kind` as `cpu` is enough for native CPU runs; however, there may be times when additional information is useful, such as when a specific execution stack is selected, when tests run on dedicated hardware whose model is known and select, and when the runtime version may explain a change in behavior. For example,
+
+```json
+{
+  "kind": "cpu",
+  "backend": "oneapi",
+  "device_model": "Intel Xeon Platinum 8481C",
+  "runtime_version": "2026.0"
 }
 ```
 
