@@ -249,7 +249,7 @@ The following are example `execution_target` values.
 
 ##### CPU
 
-Typically, specifying `kind` as `cpu` is enough for native CPU runs; however, there may be times when additional information is useful, such as when a specific execution stack is selected, when tests run on dedicated hardware whose model is known and select, and when the runtime version may explain a change in behavior. For example,
+Typically, specifying `kind` as `cpu` is enough for native CPU runs; however, there may be times when additional information is useful, such as when a specific execution stack is selected, when tests run on dedicated hardware whose model is known and relevant, and when the runtime version may explain a change in behavior. For example,
 
 ```json
 {
@@ -278,6 +278,7 @@ Upon harvesting, automated workflows in this repository will determine whether t
 -   External repositories are **not** required to install a GitHub App or provide credentials. GitHub workflow artifacts must be published on **public** GitHub repositories.
 -   For authoritative registry and compliance schemas, see the [`schemas`](https://github.com/data-apis/array-api-tests-compliance-data/tree/main/schemas) directory.
 -   Test suite results are stored in the [`data`](https://github.com/data-apis/array-api-tests-compliance-data/tree/main/data) directory as compressed records. [`data/index.json`](https://github.com/data-apis/array-api-tests-compliance-data/blob/main/data/index.json) provides a record index, along with summarized test suite results.
+-   Harvesting uses `kind`, `backend`, and `device_model` as stable series dimensions. Exact Python and platform details and the complete execution target, including runtime and driver versions, identify a matrix variant within that series. Thus, reports for multiple runtime or driver versions can coexist in one artifact while remaining part of the same broader trend.
 
 * * *
 
