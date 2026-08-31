@@ -27,6 +27,10 @@ name: demo
 
 # Workflow triggers:
 on:
+  # Run daily:
+  schedule:
+    - cron: '0 12 * * *'
+
   # Allow the workflow to be manually run:
   workflow_dispatch:
 

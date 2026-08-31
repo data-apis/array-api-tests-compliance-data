@@ -27,6 +27,10 @@ name: harvest_compliance_reports
 
 # Workflow triggers:
 on:
+  # Run daily:
+  schedule:
+    - cron: '0 9 * * *'
+
   # Allow the workflow to be manually run:
   workflow_dispatch:
 
