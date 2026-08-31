@@ -211,7 +211,9 @@ When publishing test suite results to a public URL, you should always publish to
 
 Upon harvesting, automated workflows in this repository will determine whether the downloaded artifact has already been harvested based on the artifact's checksum.
 
-### Notes
+* * *
+
+## Notes
 
 -   Artifacts may be published as an individual test suite report JSON file or a ZIP file containing one or more JSON files.
 
