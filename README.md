@@ -169,7 +169,7 @@ Once the raw report is generated, you need to augment the generated JSON with ad
 
 The following is an example test suite report:
 
-```json
+```js
 {
   "schema": "v1",
   "name": "array-api-strict",
