@@ -35,8 +35,12 @@ test('validates dynamic report metadata and derives an immutable series', functi
 test('keeps CPU and accelerator runs in distinct series', function () {
 	var cpu = structuredClone(report);
 	var cuda = structuredClone(report);
+	var upgraded;
+	var otherDevice;
 	var cpuResult;
 	var cudaResult;
+	var upgradedResult;
+	var otherDeviceResult;
 	var publishResult;
 
 	cuda.execution_target = {
@@ -46,13 +50,31 @@ test('keeps CPU and accelerator runs in distinct series', function () {
 		runtime_version: '12.8',
 		driver_version: '570.00'
 	};
+	upgraded = structuredClone(cuda);
+	upgraded.execution_target.runtime_version = '12.9';
+	upgraded.execution_target.driver_version = '571.00';
+	otherDevice = structuredClone(cuda);
+	otherDevice.execution_target.device_model = 'NVIDIA A100';
 	cpuResult = validateReport(cpu);
 	cudaResult = validateReport(cuda);
+	upgradedResult = validateReport(upgraded);
+	otherDeviceResult = validateReport(otherDevice);
 	publishResult = validatePublishReport(cuda, 'array-api-strict');
-	assert.deepEqual(cudaResult.series.execution_target, cuda.execution_target);
+	assert.deepEqual(cudaResult.series.execution_target, {
+		kind: 'gpu',
+		backend: 'cuda',
+		device_model: 'NVIDIA H100'
+	});
+	assert.deepEqual(cudaResult.variant.execution_target, cuda.execution_target);
 	assert.notEqual(cudaResult.seriesKey, cpuResult.seriesKey);
+	assert.equal(upgradedResult.seriesKey, cudaResult.seriesKey);
+	assert.notEqual(upgradedResult.variantKey, cudaResult.variantKey);
+	assert.notEqual(upgradedResult.reportSha256, cudaResult.reportSha256);
+	assert.notEqual(otherDeviceResult.seriesKey, cudaResult.seriesKey);
 	assert.deepEqual(publishResult.series, cudaResult.series);
 	assert.equal(publishResult.seriesKey, cudaResult.seriesKey);
+	assert.deepEqual(publishResult.variant, cudaResult.variant);
+	assert.equal(publishResult.variantKey, cudaResult.variantKey);
 });
 
 test('normalizes equivalent timestamps before hashing and storage', function () {

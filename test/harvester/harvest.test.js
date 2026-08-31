@@ -84,6 +84,9 @@ test('harvests, validates, and deduplicates a direct report', async function () 
 
 	assert.deepEqual(outputIndex.records[0].execution_target, { kind: 'cpu' });
 	assert.deepEqual(outputIndex.records[0].series.execution_target, { kind: 'cpu' });
+	assert.equal(outputIndex.records[0].variant_schema, 'compliance-v1-variant-v1');
+	assert.match(outputIndex.records[0].variant_key, /^sha256:[0-9a-f]{64}$/);
+	assert.deepEqual(outputIndex.records[0].variant.execution_target, { kind: 'cpu' });
 	await validateOutput({ rootDirectory: root, outputDirectory: first.outputDirectory });
 	await applyOutput(root, first.outputDirectory);
 	await validateRepository({
@@ -233,18 +236,36 @@ test('publisher rejects a changed immutable CI project ID before network access'
 	}), /immutable project ID/);
 });
 
-test('rejects distinct bundled history for one series', async function () {
+test('stores multiple dynamically inferred variants for one series', async function () {
 	var root = await createWorkspace(urlRegistry());
+	var outputIndex;
 	var result = await runHarvest({
 		rootDirectory: root,
 		now: NOW,
 		baseSha: BASE_SHA,
 		adapters: { url: urlAdapter(await fs.readFile('test/harvester/fixtures/same_series.zip')) }
 	});
+	outputIndex = JSON.parse(await fs.readFile(path.join(result.outputDirectory, 'data/index.json'), 'utf8'));
+
+	assert.equal(result.summary.has_source_errors, false);
+	assert.equal(result.summary.new_records.length, 2);
+	assert.equal(new Set(outputIndex.records.map(function series(row) { return row.series_key; })).size, 1);
+	assert.equal(new Set(outputIndex.records.map(function variant(row) { return row.variant_key; })).size, 2);
+	await validateOutput({ rootDirectory: root, outputDirectory: result.outputDirectory });
+});
+
+test('rejects distinct bundled history for one variant', async function () {
+	var root = await createWorkspace(urlRegistry());
+	var result = await runHarvest({
+		rootDirectory: root,
+		now: NOW,
+		baseSha: BASE_SHA,
+		adapters: { url: urlAdapter(await fs.readFile('test/harvester/fixtures/same_variant.zip')) }
+	});
 
 	assert.equal(result.summary.has_source_errors, true);
 	assert.equal(result.summary.new_records.length, 0);
-	assert.match(result.summary.sources[0].errors[0], /distinct reports/);
+	assert.match(result.summary.sources[0].errors[0], /inferred variant/);
 	await validateOutput({ rootDirectory: root, outputDirectory: result.outputDirectory });
 });
 
@@ -262,7 +283,7 @@ test('consolidates exact duplicate ZIP reports by UTF-8 member ordering', async 
 	assert.match(result.summary.warnings[0], /duplicate ZIP members/);
 });
 
-test('marks a rolled-back series stale after accepting a newer record', async function () {
+test('marks a rolled-back variant stale after accepting a newer record', async function () {
 	var root = await createWorkspace(urlRegistry());
 	var bytes = await fs.readFile('test/harvester/fixtures/minimal_report.json');
 	var first = await runHarvest({
@@ -287,6 +308,44 @@ test('marks a rolled-back series stale after accepting a newer record', async fu
 	assert.equal(result.summary.new_records.length, 0);
 	assert.equal(result.summary.sources[0].dispositions[0].status, 'stale');
 	assert.equal(result.summary.has_source_errors, true);
+});
+
+test('tracks freshness independently for variants in one series', async function () {
+	var root = await createWorkspace(urlRegistry());
+	var firstReport = JSON.parse(await fs.readFile('test/harvester/fixtures/minimal_report.json', 'utf8'));
+	var secondReport;
+	var first;
+	var second;
+
+	firstReport.execution_target = {
+		kind: 'gpu',
+		backend: 'cuda',
+		device_model: 'NVIDIA H100',
+		runtime_version: '12.8',
+		driver_version: '570'
+	};
+	first = await runHarvest({
+		rootDirectory: root,
+		now: NOW,
+		baseSha: BASE_SHA,
+		adapters: { url: urlAdapter(Buffer.from(JSON.stringify(firstReport))) }
+	});
+	await applyOutput(root, first.outputDirectory);
+	secondReport = structuredClone(firstReport);
+	secondReport.timestamp = '2026-08-24T09:00:00Z';
+	secondReport.execution_target.runtime_version = '12.9';
+	secondReport.execution_target.driver_version = '571';
+	second = await runHarvest({
+		rootDirectory: root,
+		outputDirectory: path.join(root, 'build/harvest-output-other-variant'),
+		now: NOW,
+		baseSha: BASE_SHA,
+		adapters: { url: urlAdapter(Buffer.from(JSON.stringify(secondReport))) }
+	});
+
+	assert.equal(second.summary.has_source_errors, false);
+	assert.equal(second.summary.new_records.length, 1);
+	assert.equal(second.summary.sources[0].dispositions[0].status, 'stored');
 });
 
 test('publishes valid partial results while recording another source failure', async function () {
