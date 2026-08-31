@@ -56,7 +56,7 @@ To add your library, please do the following:
             
         Both `url` and `ci_artifact` sources have the following optional fields:
             
-        -   **file**: specific file member within a published ZIP archive. _(optional)_
+        -   **file**: specific file member within a published ZIP archive to use as a test suite result. Other files within the ZIP archive are ignored. _(optional)_
             
 4.  Open a PR against this repository which adds the registration entry. Once merged, automated workflows will begin monitoring the registration endpoint(s).
 
