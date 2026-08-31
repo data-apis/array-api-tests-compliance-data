@@ -3,8 +3,8 @@
 var test = require('node:test');
 var assert = require('node:assert/strict');
 var fs = require('node:fs/promises');
-var fetchArtifact = require('./../lib/node_modules/@data-apis/providers/github/fetch-artifact');
-var decodePayload = require('./../lib/node_modules/@data-apis/payload/decode');
+var fetchArtifact = require('./../../lib/node_modules/@data-apis/providers/github/fetch-artifact');
+var decodePayload = require('./../../lib/node_modules/@data-apis/payload/decode');
 
 /**
 * Creates a complete mocked GitHub Actions REST fetcher.
@@ -14,7 +14,7 @@ var decodePayload = require('./../lib/node_modules/@data-apis/payload/decode');
 */
 function githubMock(options) {
 	var calls = [];
-	var zipPromise = fs.readFile('test/fixtures/array_api_compliance.json.zip');
+	var zipPromise = fs.readFile('test/harvester/fixtures/array_api_compliance.json.zip');
 
 	options = options || {};
 	return {

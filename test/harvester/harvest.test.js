@@ -5,17 +5,17 @@ var assert = require('node:assert/strict');
 var path = require('node:path');
 var fs = require('node:fs/promises');
 var constants = require('node:fs').constants;
-var sha256 = require('./../lib/node_modules/@data-apis/canonical/sha256');
-var serializeIndex = require('./../lib/node_modules/@data-apis/record/serialize-index');
-var HarvesterError = require('./../lib/node_modules/@data-apis/errors/harvester-error');
-var gzipEnvelope = require('./../lib/node_modules/@data-apis/record/gzip-envelope');
-var parseGzipEnvelope = require('./../lib/node_modules/@data-apis/record/parse-gzip-envelope');
-var validatePublishEnvelope = require('./../lib/node_modules/@data-apis/publish/validate-envelope');
-var verifyTransfer = require('./../lib/node_modules/@data-apis/publish/verify-transfer');
-var runHarvest = require('./../lib/node_modules/@data-apis/harvest/run');
-var validateOutput = require('./../lib/node_modules/@data-apis/output/validate');
-var loadRegistry = require('./../lib/node_modules/@data-apis/registry/load');
-var validateRepository = require('./../lib/node_modules/@data-apis/repository/validate');
+var sha256 = require('./../../lib/node_modules/@data-apis/canonical/sha256');
+var serializeIndex = require('./../../lib/node_modules/@data-apis/record/serialize-index');
+var HarvesterError = require('./../../lib/node_modules/@data-apis/errors/harvester-error');
+var gzipEnvelope = require('./../../lib/node_modules/@data-apis/record/gzip-envelope');
+var parseGzipEnvelope = require('./../../lib/node_modules/@data-apis/record/parse-gzip-envelope');
+var validatePublishEnvelope = require('./../../lib/node_modules/@data-apis/publish/validate-envelope');
+var verifyTransfer = require('./../../lib/node_modules/@data-apis/publish/verify-transfer');
+var runHarvest = require('./../../lib/node_modules/@data-apis/harvest/run');
+var validateOutput = require('./../../lib/node_modules/@data-apis/output/validate');
+var loadRegistry = require('./../../lib/node_modules/@data-apis/registry/load');
+var validateRepository = require('./../../lib/node_modules/@data-apis/repository/validate');
 var createWorkspace = require('./helpers/create_workspace.js');
 var urlRegistry = require('./helpers/url_registry.js');
 
@@ -67,7 +67,7 @@ async function applyOutput(root, output) {
 
 test('harvests, validates, and deduplicates a direct report', async function () {
 	var root = await createWorkspace(urlRegistry());
-	var bytes = await fs.readFile('test/fixtures/minimal_report.json');
+	var bytes = await fs.readFile('test/harvester/fixtures/minimal_report.json');
 	var outputIndex;
 	var first = await runHarvest({
 		rootDirectory: root,
@@ -111,7 +111,7 @@ test('stores multiple dynamically inferred series from one ZIP', async function 
 		rootDirectory: root,
 		now: NOW,
 		baseSha: BASE_SHA,
-		adapters: { url: urlAdapter(await fs.readFile('test/fixtures/multi_report.zip')) }
+		adapters: { url: urlAdapter(await fs.readFile('test/harvester/fixtures/multi_report.zip')) }
 	});
 	var outputIndex = JSON.parse(await fs.readFile(path.join(result.outputDirectory, 'data/index.json'), 'utf8'));
 
@@ -140,7 +140,7 @@ test('stores provider-neutral CI provenance with provider-specific details', asy
 		adapters: {
 			ciArtifact: async function adapter() {
 				return {
-					bytes: await fs.readFile('test/fixtures/minimal_report.json'),
+					bytes: await fs.readFile('test/harvester/fixtures/minimal_report.json'),
 					origin: {
 						type: 'ci_artifact',
 						provider: 'github',
@@ -187,7 +187,7 @@ test('publisher rejects a changed immutable CI project ID before network access'
 		ref: { kind: 'branch', name: 'main' },
 		selector: { workflow: 'compliance.yml', artifact: 'reports' }
 	};
-	var report = JSON.parse(await fs.readFile('test/fixtures/minimal_report.json', 'utf8'));
+	var report = JSON.parse(await fs.readFile('test/harvester/fixtures/minimal_report.json', 'utf8'));
 
 	registry.libraries[0].sources = [source];
 	var root = await createWorkspace(registry);
@@ -239,7 +239,7 @@ test('rejects distinct bundled history for one series', async function () {
 		rootDirectory: root,
 		now: NOW,
 		baseSha: BASE_SHA,
-		adapters: { url: urlAdapter(await fs.readFile('test/fixtures/same_series.zip')) }
+		adapters: { url: urlAdapter(await fs.readFile('test/harvester/fixtures/same_series.zip')) }
 	});
 
 	assert.equal(result.summary.has_source_errors, true);
@@ -254,7 +254,7 @@ test('consolidates exact duplicate ZIP reports by UTF-8 member ordering', async 
 		rootDirectory: root,
 		now: NOW,
 		baseSha: BASE_SHA,
-		adapters: { url: urlAdapter(await fs.readFile('test/fixtures/duplicate_report.zip')) }
+		adapters: { url: urlAdapter(await fs.readFile('test/harvester/fixtures/duplicate_report.zip')) }
 	});
 
 	assert.equal(result.summary.new_records.length, 1);
@@ -264,7 +264,7 @@ test('consolidates exact duplicate ZIP reports by UTF-8 member ordering', async 
 
 test('marks a rolled-back series stale after accepting a newer record', async function () {
 	var root = await createWorkspace(urlRegistry());
-	var bytes = await fs.readFile('test/fixtures/minimal_report.json');
+	var bytes = await fs.readFile('test/harvester/fixtures/minimal_report.json');
 	var first = await runHarvest({
 		rootDirectory: root,
 		now: NOW,
@@ -291,7 +291,7 @@ test('marks a rolled-back series stale after accepting a newer record', async fu
 
 test('publishes valid partial results while recording another source failure', async function () {
 	var root = await createWorkspace(urlRegistry(2));
-	var valid = await fs.readFile('test/fixtures/minimal_report.json');
+	var valid = await fs.readFile('test/harvester/fixtures/minimal_report.json');
 	var result = await runHarvest({
 		rootDirectory: root,
 		now: NOW,
@@ -311,7 +311,7 @@ test('publishes valid partial results while recording another source failure', a
 
 test('rejects endpoint reuse and tampered output bytes', async function () {
 	var root = await createWorkspace(urlRegistry());
-	var bytes = await fs.readFile('test/fixtures/minimal_report.json');
+	var bytes = await fs.readFile('test/harvester/fixtures/minimal_report.json');
 	var result = await runHarvest({
 		rootDirectory: root,
 		now: NOW,
@@ -342,7 +342,7 @@ test('rejects duplicate output index paths before publication', async function (
 		rootDirectory: root,
 		now: NOW,
 		baseSha: BASE_SHA,
-		adapters: { url: urlAdapter(await fs.readFile('test/fixtures/minimal_report.json')) }
+		adapters: { url: urlAdapter(await fs.readFile('test/harvester/fixtures/minimal_report.json')) }
 	});
 	var indexPath = path.join(result.outputDirectory, 'data/index.json');
 	var index = JSON.parse(await fs.readFile(indexPath, 'utf8'));
@@ -365,7 +365,7 @@ test('fast repository validation compares all path-derived index fields', async 
 		rootDirectory: root,
 		now: NOW,
 		baseSha: BASE_SHA,
-		adapters: { url: urlAdapter(await fs.readFile('test/fixtures/minimal_report.json')) }
+		adapters: { url: urlAdapter(await fs.readFile('test/harvester/fixtures/minimal_report.json')) }
 	});
 
 	await applyOutput(root, result.outputDirectory);
@@ -389,7 +389,7 @@ test('fast repository validation compares all path-derived index fields', async 
 
 test('accepts the report/index platform description boundary', async function () {
 	var root = await createWorkspace(urlRegistry());
-	var report = JSON.parse(await fs.readFile('test/fixtures/minimal_report.json', 'utf8'));
+	var report = JSON.parse(await fs.readFile('test/harvester/fixtures/minimal_report.json', 'utf8'));
 
 	report.platform.description = 'x'.repeat(16384);
 	var result = await runHarvest({
@@ -430,7 +430,7 @@ test('suppresses only an exhausted CI provider and continues URL sources', async
 				calls += 1;
 				throw new HarvesterError('rate limited', { code: 'RATE_LIMITED', resetAt: '2026-08-24T13:00:00Z' });
 			},
-			url: urlAdapter(await fs.readFile('test/fixtures/minimal_report.json'))
+			url: urlAdapter(await fs.readFile('test/harvester/fixtures/minimal_report.json'))
 		}
 	});
 

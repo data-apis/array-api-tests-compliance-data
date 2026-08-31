@@ -3,20 +3,20 @@
 var test = require('node:test');
 var assert = require('node:assert/strict');
 var fs = require('node:fs');
-var validateRegistry = require('./../lib/node_modules/@data-apis/registry/validate');
-var sourceFingerprint = require('./../lib/node_modules/@data-apis/registry/source-fingerprint');
-var validateReport = require('./../lib/node_modules/@data-apis/report/validate');
-var validatePublishReport = require('./../lib/node_modules/@data-apis/publish/validate-report');
+var validateRegistry = require('./../../lib/node_modules/@data-apis/registry/validate');
+var sourceFingerprint = require('./../../lib/node_modules/@data-apis/registry/source-fingerprint');
+var validateReport = require('./../../lib/node_modules/@data-apis/report/validate');
+var validatePublishReport = require('./../../lib/node_modules/@data-apis/publish/validate-report');
 var urlRegistry = require('./helpers/url_registry.js');
 
-var report = JSON.parse(fs.readFileSync('test/fixtures/minimal_report.json', 'utf8'));
+var report = JSON.parse(fs.readFileSync('test/harvester/fixtures/minimal_report.json', 'utf8'));
 
 test('validates dynamic report metadata and derives an immutable series', function () {
 	var result = validateReport(report, {
 		expectedName: 'array-api-strict',
 		now: Date.parse('2026-08-24T12:00:00Z')
 	});
-	var windows = JSON.parse(fs.readFileSync('test/fixtures/minimal_report_windows.json', 'utf8'));
+	var windows = JSON.parse(fs.readFileSync('test/harvester/fixtures/minimal_report_windows.json', 'utf8'));
 	var windowsResult = validateReport(windows, {
 		expectedName: 'array-api-strict',
 		now: Date.parse('2026-08-24T12:00:00Z')

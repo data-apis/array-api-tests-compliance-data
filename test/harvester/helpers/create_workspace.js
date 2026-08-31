@@ -3,7 +3,7 @@
 var path = require('node:path');
 var os = require('node:os');
 var fs = require('node:fs/promises');
-var serializeIndex = require('./../../lib/node_modules/@data-apis/record/serialize-index');
+var serializeIndex = require('./../../../lib/node_modules/@data-apis/record/serialize-index');
 
 /**
 * Creates an isolated repository fixture with an empty data index.

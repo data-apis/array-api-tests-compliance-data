@@ -2,7 +2,7 @@
 
 var test = require('node:test');
 var assert = require('node:assert/strict');
-var fetchBounded = require('./../lib/node_modules/@data-apis/http/fetch-bounded');
+var fetchBounded = require('./../../lib/node_modules/@data-apis/http/fetch-bounded');
 
 test('strips authorization before following an HTTPS redirect', async function () {
 	var calls = [];

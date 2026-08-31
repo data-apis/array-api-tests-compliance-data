@@ -5,7 +5,7 @@ var assert = require('node:assert/strict');
 var fs = require('node:fs/promises');
 var path = require('node:path');
 var os = require('node:os');
-var writeActionsSummary = require('./../lib/node_modules/@data-apis/summary/write-actions');
+var writeActionsSummary = require('./../../lib/node_modules/@data-apis/summary/write-actions');
 
 /**
 * Returns a representative successful harvest summary.

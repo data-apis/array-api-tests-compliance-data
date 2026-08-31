@@ -5,10 +5,10 @@ var assert = require('node:assert/strict');
 var path = require('node:path');
 var os = require('node:os');
 var fs = require('node:fs/promises');
-var runHarvest = require('./../lib/node_modules/@data-apis/harvest/run');
-var publish = require('./../lib/node_modules/@data-apis/publish/run');
-var sha256 = require('./../lib/node_modules/@data-apis/canonical/sha256');
-var serializeIndex = require('./../lib/node_modules/@data-apis/record/serialize-index');
+var runHarvest = require('./../../lib/node_modules/@data-apis/harvest/run');
+var publish = require('./../../lib/node_modules/@data-apis/publish/run');
+var sha256 = require('./../../lib/node_modules/@data-apis/canonical/sha256');
+var serializeIndex = require('./../../lib/node_modules/@data-apis/record/serialize-index');
 var createWorkspace = require('./helpers/create_workspace.js');
 var urlRegistry = require('./helpers/url_registry.js');
 
@@ -75,7 +75,7 @@ function gitDataMock(refSha) {
 
 test('publishes only manifest files through a non-force atomic ref update', async function () {
 	var root = await createWorkspace(urlRegistry());
-	var report = await fs.readFile('test/fixtures/minimal_report.json');
+	var report = await fs.readFile('test/harvester/fixtures/minimal_report.json');
 	var harvest = await runHarvest({
 		rootDirectory: root,
 		now: Date.parse('2026-08-24T12:00:00Z'),
@@ -108,7 +108,7 @@ test('publishes only manifest files through a non-force atomic ref update', asyn
 
 test('refuses publication when the branch advanced', async function () {
 	var root = await createWorkspace(urlRegistry());
-	var report = await fs.readFile('test/fixtures/minimal_report.json');
+	var report = await fs.readFile('test/harvester/fixtures/minimal_report.json');
 	var harvest = await runHarvest({
 		rootDirectory: root,
 		now: Date.parse('2026-08-24T12:00:00Z'),
@@ -141,7 +141,7 @@ test('rejects a rehashed but semantically tampered index before network access',
 		adapters: {
 			url: async function adapter(context) {
 				return {
-					bytes: await fs.readFile('test/fixtures/minimal_report.json'),
+					bytes: await fs.readFile('test/harvester/fixtures/minimal_report.json'),
 					origin: { type: 'url', endpoint: context.source.url }
 				};
 			}
@@ -167,7 +167,7 @@ test('rejects a rehashed but semantically tampered index before network access',
 
 test('rejects summary/manifest disagreement before network access', async function () {
 	var root = await createWorkspace(urlRegistry());
-	var report = await fs.readFile('test/fixtures/minimal_report.json');
+	var report = await fs.readFile('test/harvester/fixtures/minimal_report.json');
 	var harvest = await runHarvest({
 		rootDirectory: root,
 		now: Date.parse('2026-08-24T12:00:00Z'),

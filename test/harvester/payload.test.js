@@ -3,8 +3,8 @@
 var test = require('node:test');
 var assert = require('node:assert/strict');
 var fs = require('node:fs/promises');
-var decodePayload = require('./../lib/node_modules/@data-apis/payload/decode');
-var validateReport = require('./../lib/node_modules/@data-apis/report/validate');
+var decodePayload = require('./../../lib/node_modules/@data-apis/payload/decode');
+var validateReport = require('./../../lib/node_modules/@data-apis/report/validate');
 
 /**
 * Replaces every equal-length byte sequence in a buffer.
@@ -30,8 +30,8 @@ function replaceBytes(bytes, before, after) {
 }
 
 test('detects equivalent direct JSON and ZIP payloads from bytes', async function () {
-	var direct = await decodePayload(await fs.readFile('test/fixtures/array_api_compliance.json'));
-	var zipped = await decodePayload(await fs.readFile('test/fixtures/array_api_compliance.json.zip'));
+	var direct = await decodePayload(await fs.readFile('test/harvester/fixtures/array_api_compliance.json'));
+	var zipped = await decodePayload(await fs.readFile('test/harvester/fixtures/array_api_compliance.json.zip'));
 	var directReport = validateReport(JSON.parse(direct.candidates[0].bytes.toString('utf8')));
 	var zippedReport = validateReport(JSON.parse(zipped.candidates[0].bytes.toString('utf8')));
 
@@ -41,7 +41,7 @@ test('detects equivalent direct JSON and ZIP payloads from bytes', async functio
 });
 
 test('accepts an optional UTF-8 BOM without changing report identity', async function () {
-	var bytes = await fs.readFile('test/fixtures/minimal_report.json');
+	var bytes = await fs.readFile('test/harvester/fixtures/minimal_report.json');
 	var plain = await decodePayload(bytes);
 	var bom = await decodePayload(Buffer.concat([Buffer.from([0xef, 0xbb, 0xbf]), bytes]));
 
@@ -49,7 +49,7 @@ test('accepts an optional UTF-8 BOM without changing report identity', async fun
 });
 
 test('discovers multiple JSON reports or selects one exact member', async function () {
-	var bytes = await fs.readFile('test/fixtures/multi_report.zip');
+	var bytes = await fs.readFile('test/harvester/fixtures/multi_report.zip');
 	var all = await decodePayload(bytes);
 	var selected = await decodePayload(bytes, { file: 'minimal_report_windows.json' });
 
@@ -59,21 +59,21 @@ test('discovers multiple JSON reports or selects one exact member', async functi
 });
 
 test('rejects unexpected ZIP contents, missing members, and unknown payloads', async function () {
-	await assert.rejects(decodePayload(await fs.readFile('test/fixtures/unexpected_file.zip')), /Unexpected non-JSON/);
-	await assert.rejects(decodePayload(await fs.readFile('test/fixtures/multi_report.zip'), { file: 'missing.json' }), /not found/);
+	await assert.rejects(decodePayload(await fs.readFile('test/harvester/fixtures/unexpected_file.zip')), /Unexpected non-JSON/);
+	await assert.rejects(decodePayload(await fs.readFile('test/harvester/fixtures/multi_report.zip'), { file: 'missing.json' }), /not found/);
 	await assert.rejects(decodePayload(Buffer.from('not a payload')), /neither JSON nor ZIP/);
 	await assert.rejects(decodePayload(Buffer.from([0x7b, 0xff, 0x7d])), /encoded data|UTF-8/i);
 });
 
 test('enforces per-report ZIP expansion limits', async function () {
-	await assert.rejects(decodePayload(await fs.readFile('test/fixtures/multi_report.zip'), {
+	await assert.rejects(decodePayload(await fs.readFile('test/harvester/fixtures/multi_report.zip'), {
 		maxJsonBytes: 10
 	}), /too large/);
 });
 
 test('rejects traversal paths, duplicate names, and corrupted members', async function () {
-	var multi = await fs.readFile('test/fixtures/multi_report.zip');
-	var duplicate = await fs.readFile('test/fixtures/duplicate_report.zip');
+	var multi = await fs.readFile('test/harvester/fixtures/multi_report.zip');
+	var duplicate = await fs.readFile('test/harvester/fixtures/duplicate_report.zip');
 	var traversal = replaceBytes(multi, 'minimal_report.json', '../evil_report.json');
 	var duplicateName = replaceBytes(duplicate, 'b.json', 'a.json');
 	var corrupted = Buffer.from(multi);
@@ -89,7 +89,7 @@ test('rejects traversal paths, duplicate names, and corrupted members', async fu
 });
 
 test('rejects explicitly non-regular ZIP entry types', async function () {
-	var bytes = Buffer.from(await fs.readFile('test/fixtures/multi_report.zip'));
+	var bytes = Buffer.from(await fs.readFile('test/harvester/fixtures/multi_report.zip'));
 	var central = bytes.indexOf(Buffer.from('PK\x01\x02', 'binary'));
 	var fifoMode = ((0x1000 | 0o644) << 16) >>> 0;
 
