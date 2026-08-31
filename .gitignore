@@ -32,6 +32,7 @@ reports/
 build/
 tmp/
 /downloads/
+public/dist/
 
 # Compiled source #
 ###################
