@@ -76,7 +76,7 @@ tmp/
 *.rar
 *.tar
 *.zip
-!test/fixtures/*.zip
+!test/**/fixtures/*.zip
 
 # Logs and databases #
 ######################
