@@ -3,7 +3,7 @@
   "$id": "https://data-apis.org/schemas/compliance/v1.schema.json",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema", "name", "version", "api_version", "timestamp", "platform", "python", "test_suite", "data"],
+  "required": ["schema", "name", "version", "api_version", "timestamp", "platform", "execution_target", "python", "test_suite", "data"],
   "properties": {
     "schema": { "const": "v1" },
     "name": { "$ref": "#/$defs/nonempty" },
@@ -21,6 +21,7 @@
         "machine": { "$ref": "#/$defs/nonempty" }
       }
     },
+    "execution_target": { "$ref": "#/$defs/executionTarget" },
     "python": { "$ref": "#/$defs/nonempty" },
     "test_suite": { "type": "string", "pattern": "^[0-9a-fA-F]{40}$" },
     "data": {
@@ -53,6 +54,24 @@
   },
   "$defs": {
     "nonempty": { "type": "string", "minLength": 1, "maxLength": 512 },
-    "nonemptyLong": { "type": "string", "minLength": 1, "maxLength": 16384 }
+    "nonemptyLong": { "type": "string", "minLength": 1, "maxLength": 16384 },
+    "executionTarget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind"],
+      "properties": {
+        "kind": { "enum": ["cpu", "gpu", "tpu", "other"] },
+        "backend": { "type": "string", "pattern": "^[a-z0-9]+(?:[._+-][a-z0-9]+)*$", "maxLength": 80 },
+        "device_model": { "$ref": "#/$defs/nonempty" },
+        "runtime_version": { "$ref": "#/$defs/nonempty" },
+        "driver_version": { "$ref": "#/$defs/nonempty" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "kind": { "const": "cpu" } } },
+          "else": { "required": ["backend"] }
+        }
+      ]
+    }
   }
 }
