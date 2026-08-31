@@ -1,4 +1,48 @@
 {
   "schema": "data-index-v1",
-  "records": []
+  "records": [
+    {
+      "library_id": "array-api-strict",
+      "source_id": "demo",
+      "source_fingerprint": "sha256:60e5433590fb86ec2330d2b7b1866cb59b5299776d5410e5b49f1c94a209763b",
+      "series_schema": "compliance-v1-series-v1",
+      "series_key": "sha256:69a728159a670daf65b1a99b1eebfa70e8d9d9c209b3fd7aee7980d00b888458",
+      "origin": {
+        "type": "ci_artifact",
+        "provider": "github",
+        "project": {
+          "id": "1245561129",
+          "locator": "data-apis/array-api-tests-compliance-data"
+        }
+      },
+      "series": {
+        "api_version": "2025.12",
+        "python": "3.14",
+        "platform": {
+          "system": "Linux",
+          "machine": "x86_64"
+        }
+      },
+      "timestamp": "2026-08-24T10:34:27Z",
+      "path": "array-api-strict/demo/2026_08_24T10_34_27Z__sha256_b4dd8b534ba43e88285899ff4eaddd696236b3611e0f937105833d97e43a8992.json.gz",
+      "report_sha256": "b4dd8b534ba43e88285899ff4eaddd696236b3611e0f937105833d97e43a8992",
+      "version": "2.6.1",
+      "api_version": "2025.12",
+      "python": "3.14.7",
+      "platform": {
+        "description": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+        "system": "Linux",
+        "release": "6.17.0-1022-azure",
+        "machine": "x86_64"
+      },
+      "test_suite": "05b12afc0811fdac80028bc0454d6ca0aefb8101",
+      "summary": {
+        "passed": 1353,
+        "skipped": 5,
+        "failed": 24,
+        "total": 1382,
+        "collected": 1382
+      }
+    }
+  ]
 }
