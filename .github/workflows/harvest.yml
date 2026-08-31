@@ -1,0 +1,201 @@
+#/
+# @license MIT
+#
+# Copyright (c) 2026 Python Data APIs Consortium.
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+#/
+
+# Workflow name:
+name: Harvest compliance reports
+
+# Workflow triggers:
+on:
+  # Allow the workflow to be manually run:
+  workflow_dispatch:
+
+# Workflow concurrency group:
+concurrency:
+
+  # Specify a group name:
+  group: compliance-report-harvest
+
+  # Specify whether to cancel any currently running workflow in the same concurrency group:
+  cancel-in-progress: false
+
+# Global permissions:
+permissions:
+  # Allow read-only access to the repository contents:
+  contents: read
+
+# Workflow jobs:
+jobs:
+
+  # Define a job for harvesting test report artifacts...
+  harvest:
+
+    # Define a display name:
+    name: 'Harvest test reports'
+
+    # Define the type of virtual host machine:
+    runs-on: ubuntu-latest
+
+    # Only run this job on the default repository branch:
+    if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+
+    environment: harvest
+
+    # Job permissions:
+    permissions:
+      # Allow read access to repository and action contents:
+      actions: read
+      contents: read
+
+    # Define the sequence of job steps...
+    steps:
+
+      # Check out the source repository:
+      - name: 'Check out the source revision'
+
+        # Pin action full length commit SHA:
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+
+        # Specify repository data:
+        with:
+          persist-credentials: false
+          ref: ${{ github.sha }}
+
+      # Install Node.js
+      - name: 'Install Node.js'
+
+        # Pin action to full length commit SHA:
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+
+        # Specify Node.js info:
+        with:
+          node-version: '22'
+          cache: npm
+
+        timeout-minutes: 5
+
+      # Install dependencies:
+      - name: 'Install dependencies'
+        run: npm ci --ignore-scripts
+
+      # Run tests:
+      - name: 'Run tests'
+        run: npm test
+
+      # Validate existing repository data:
+      - name: 'Validate existing repository data'
+        run: npm run validate
+
+      # Retrieve artifacts from registered sources:
+      - name: 'Harvest test suite reports'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          HARVEST_BASE_SHA: ${{ github.sha }}
+          HARVEST_GITHUB_TOKEN: ${{ secrets.HARVEST_GITHUB_TOKEN }}
+        run: |
+          node scripts/harvest.js --output-dir build/harvest-output --base-sha "${HARVEST_BASE_SHA}"
+
+      # Validate retrieved artifacts:
+      - name: 'Validate the harvested reports'
+        run: |
+          node scripts/validate_harvest_output.js --output-dir build/harvest-output
+
+      # Upload validated artifacts:
+      - name: 'Upload validated artifacts'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: compliance-harvest-${{ github.run_id }}-${{ github.run_attempt }}
+          path: build/harvest-output
+          include-hidden-files: true
+
+          # Specify what should happen if no files are found to upload:
+          if-no-files-found: error
+
+          # Specify the number of days to retain the artifact (default is 90 days):
+          retention-days: 1
+
+  # Define a job for publishing artifacts to the repository...
+  publish:
+
+    # Define the type of virtual host machine:
+    runs-on: ubuntu-latest
+
+    # Only run this job on the default repository branch:
+    if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+
+    # Require successful completion of the `harvest` job for harvesting artifacts:
+    needs: harvest
+
+    permissions:
+      # Allow read access to action contents:
+      actions: read
+
+      # Allow write permission to the repository:
+      contents: write
+
+    # Define the sequence of job steps...
+    steps:
+
+      # Check out the source repository:
+      - name: 'Check out the source revision'
+
+        # Pin action full length commit SHA:
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+
+        # Specify repository data:
+        with:
+          persist-credentials: false
+          ref: ${{ github.sha }}
+
+      # Install Node.js
+      - name: 'Install Node.js'
+
+        # Pin to the full length commit SHA:
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+
+        # Specify Node.js info:
+        with:
+          node-version: '22'
+
+      # Download harvested test suite reports:
+      - name: 'Download the validated artifacts'
+
+        # Pin to the full length commit SHA:
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+        with:
+          name: compliance-harvest-${{ github.run_id }}-${{ github.run_attempt }}
+          path: build/harvest-output
+
+      # Publish report data to the repository:
+      - name: 'Publish validated data'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          HARVEST_BASE_SHA: ${{ github.sha }}
+          HARVEST_BRANCH: ${{ github.event.repository.default_branch }}
+        run: |
+          node scripts/publish_harvest.js --output-dir build/harvest-output --branch "${HARVEST_BRANCH}" --base-sha "${HARVEST_BASE_SHA}"
+
+      # Report any failures:
+      - name: 'Report source-level failures'
+        run: |
+          node scripts/assert_harvest_summary.js --summary build/harvest-output/summary.json
