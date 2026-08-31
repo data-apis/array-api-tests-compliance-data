@@ -113,3 +113,13 @@ The following is an example registration entry for a GitHub workflow artifact:
 Encountered a bug? Please file a [GitHub issue](https://github.com/data-apis/array-api-tests-compliance-data/issues?q=sort%3Aupdated-desc+is%3Aissue+state%3Aopen+). Cheers!
 
 For other discussion, please see the [Array API](https://github.com/data-apis/array-api) repository and feel free to join one of the regular [workgroup meetings](https://github.com/data-apis/array-api#workgroup-meetings).
+
+* * *
+
+## License
+
+See [LICENSE](https://github.com/data-apis/array-api-tests-compliance-data/blob/main/LICENSE).
+
+## Copyright
+
+Copyright &copy; 2026. Python Data APIs Consortium.
