@@ -279,6 +279,7 @@ Upon harvesting, automated workflows in this repository will determine whether t
 -   For authoritative registry and compliance schemas, see the [`schemas`](https://github.com/data-apis/array-api-tests-compliance-data/tree/main/schemas) directory.
 -   Test suite results are stored in the [`data`](https://github.com/data-apis/array-api-tests-compliance-data/tree/main/data) directory as compressed records. [`data/index.json`](https://github.com/data-apis/array-api-tests-compliance-data/blob/main/data/index.json) provides a record index, along with summarized test suite results.
 -   Harvesting uses `kind`, `backend`, and `device_model` as stable series dimensions. Exact Python and platform details and the complete execution target, including runtime and driver versions, identify a matrix variant within that series. Thus, reports for multiple runtime or driver versions can coexist in one artifact while remaining part of the same broader trend.
+-   Harvesting test suite reports happens **daily** and only the latest artifact is resolved. Any artifacts published between harvest times are ignored.
 
 * * *
 
