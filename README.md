@@ -58,7 +58,7 @@ To add your library, please do the following:
             
 4.  Open a PR against this repository which adds the registration entry. Once merged, automated workflows will begin monitoring the registration endpoint(s).
 
-5.  Set up your library to begin publishing test suite results. See below.
+5.  Set up your library to begin publishing test suite results. See below concerning **Test Suite Artifacts**.
 
 ### Examples
 
