@@ -54,7 +54,9 @@ To add your library, please do the following:
             -   **workflow**: workflow filename.
             -   **artifact**: artifact name.
             
-        -   **file**: specific file member within a published ZIP archive. This applies to both `url` and `ci_artifact` sources. _(optional)_
+        Both `url` and `ci_artifact` sources have the following optional fields:
+            
+        -   **file**: specific file member within a published ZIP archive. _(optional)_
             
 4.  Open a PR against this repository which adds the registration entry. Once merged, automated workflows will begin monitoring the registration endpoint(s).
 
