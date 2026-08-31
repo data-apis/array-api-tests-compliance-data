@@ -219,6 +219,38 @@ test( 'builds registered empty states and an exact same-suite comparison', async
 	assert.deepEqual( loads.sort(), [ current.report_sha256, previous.report_sha256 ].sort() );
 } );
 
+test( 'summarizes every outcome transition when aggregate counts are unchanged', async () => {
+	const previous = record({
+		report_sha256: 'b'.repeat( 64 ),
+		summary: { collected: 2, failed: 1, passed: 1, total: 2 },
+		timestamp: '2026-08-24T00:00:00Z'
+	});
+	const current = record({
+		report_sha256: 'c'.repeat( 64 ),
+		summary: { collected: 2, failed: 1, passed: 1, total: 2 }
+	});
+	const projections = new Map([
+		[ previous.report_sha256, { failures: [{ nodeid: 'b', outcome: 'failed' }], tests: [
+			{ nodeid: 'a', outcome: 'passed' },
+			{ nodeid: 'b', outcome: 'failed' }
+		] } ],
+		[ current.report_sha256, { failures: [{ nodeid: 'a', outcome: 'failed' }], tests: [
+			{ nodeid: 'a', outcome: 'failed' },
+			{ nodeid: 'b', outcome: 'passed' }
+		] } ]
+	]);
+	const model = await buildDashboardModel({
+		index: { records: [ previous, current ] },
+		loadProjection: async ( value ) => projections.get( value.report_sha256 ),
+		registry: REGISTRY
+	});
+
+	assert.equal(
+		model.contexts[ 0 ].comparison.headline,
+		'2 tests changed outcome: 1 passed to failed; 1 failed to passed.'
+	);
+} );
+
 test( 'does not skip an immediate suite boundary to compare an older run', async () => {
 	const oldSameSuite = record({ report_sha256: 'd'.repeat( 64 ), timestamp: '2026-08-01T00:00:00Z' });
 	const boundary = record({ report_sha256: 'e'.repeat( 64 ), test_suite: 'b'.repeat( 40 ), timestamp: '2026-08-20T00:00:00Z' });

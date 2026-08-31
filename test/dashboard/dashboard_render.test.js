@@ -164,9 +164,7 @@ function unknownOutcomeDataRoot() {
 			series_key: 'sha256:'+ 'b'.repeat( 64 ),
 			series_schema: 'compliance-v1-series-v1',
 			source_id: 'ci',
-			summary: index === 0 ?
-				{ collected: 3, passed: 2, total: 3, xfailed: 1 } :
-				{ collected: 3, failed: 1, passed: 1, total: 3, xfailed: 1 },
+			summary: { collected: 4, failed: 1, passed: 2, total: 4, xfailed: 1 },
 			test_suite: 'c'.repeat( 40 ),
 			timestamp,
 			variant: { api_version: '2025.12', execution_target: executionTarget, platform, python },
@@ -179,7 +177,8 @@ function unknownOutcomeDataRoot() {
 		const envelope = { report: { data: { tests: [
 			{ nodeid: 'a', outcome: 'passed' },
 			{ nodeid: 'b', outcome: index === 0 ? 'passed' : 'failed' },
-			{ nodeid: 'c', outcome: 'xfailed' }
+			{ nodeid: 'c', outcome: 'xfailed' },
+			{ nodeid: 'd', outcome: index === 0 ? 'failed' : 'passed' }
 		] } } };
 		fs.writeFileSync( path.join( root, 'data', value.path ), zlib.gzipSync( JSON.stringify( envelope ) ) );
 	});
@@ -283,8 +282,9 @@ test( 'selects the newest synthetic run and retains extension outcomes', () => {
 	const output = build( '/', unknownOutcomeDataRoot() );
 	const homepage = read( output, 'index.html' );
 	assert.match( homepage, /<h2 id="library-result-title">Alpha <span>2\.0\.0<\/span><\/h2>/ );
-	assert.match( homepage, /1 of 3 tests passed/ );
+	assert.match( homepage, /2 of 4 tests passed/ );
 	assert.match( homepage, /comparison-outcomes[\s\S]*1 xfailed[\s\S]*comparison-row--current[\s\S]*1 xfailed/ );
+	assert.match( homepage, /2 tests changed outcome: 1 passed to failed; 1 failed to passed\./ );
 	assert.match( homepage, /<li>Python 3\.14\.2<\/li>/ );
 	assert.match( homepage, /Linux 6\.1 x86_64<\/li>/ );
 	assert.match( homepage, /Platform Linux glibc 2\.39/ );

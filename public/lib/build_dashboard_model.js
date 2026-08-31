@@ -116,12 +116,21 @@ function historyPoints( records ) {
 	});
 }
 
-function headlineText( transition ) {
-	if ( !transition ) {
+function transitionText( transition ) {
+	return transition.count+' '+transition.from+' to '+transition.to;
+}
+
+function headlineText( transitions ) {
+	if ( transitions.length === 0 ) {
 		return 'No tests changed outcome.';
 	}
-	const noun = transition.count === 1 ? 'test' : 'tests';
-	return transition.count+' '+noun+' changed from '+transition.from+' to '+transition.to+'.';
+	if ( transitions.length === 1 ) {
+		const transition = transitions[ 0 ];
+		const noun = transition.count === 1 ? 'test' : 'tests';
+		return transition.count+' '+noun+' changed from '+transition.from+' to '+transition.to+'.';
+	}
+	const total = transitions.reduce( ( sum, transition ) => sum + transition.count, 0 );
+	return total+' tests changed outcome: '+transitions.map( transitionText ).join( '; ' )+'.';
 }
 
 function comparisonView( currentRecord, previousRecord, result ) {
@@ -130,7 +139,7 @@ function comparisonView( currentRecord, previousRecord, result ) {
 		current: runView( currentRecord ),
 		diagnostic: result.tests.diagnostic,
 		environmentChanges: result.environmentChanges,
-		headline: result.tests.diagnostic ? '' : headlineText( result.headlineTransition ),
+		headline: result.tests.diagnostic ? '' : headlineText( result.tests.transitions ),
 		previous: runView( previousRecord ),
 		summaryDeltas: result.summaryDeltas,
 		tests: result.tests

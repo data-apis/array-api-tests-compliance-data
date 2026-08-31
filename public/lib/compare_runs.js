@@ -124,7 +124,6 @@ function compareRuns( currentRecord, previousRecord, currentProjection, previous
 	const testComparison = compareTests( currentProjection.tests, previousProjection.tests );
 	return {
 		environmentChanges: environmentChanges( currentRecord, previousRecord ),
-		headlineTransition: testComparison.transitions[ 0 ] || null,
 		summaryDeltas: compareSummaries( currentRecord.summary, previousRecord.summary ),
 		tests: testComparison
 	};
