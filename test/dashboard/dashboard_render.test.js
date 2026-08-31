@@ -15,7 +15,6 @@ const zlib = require( 'node:zlib' );
 
 const ROOT = path.resolve( __dirname, '..', '..' );
 const ELEVENTY = path.join( ROOT, 'node_modules', '@11ty', 'eleventy', 'cmd.cjs' );
-const SERIES = '825a99e02cebb16f439f25d8b634b3f18ab37ec5ce95c857f63500ece3778441';
 
 function build( pathPrefix, dataRoot ) {
 	const output = fs.mkdtempSync( path.join( os.tmpdir(), 'dashboard-render-' ) );
@@ -139,7 +138,7 @@ function unknownOutcomeDataRoot() {
 	fs.writeFileSync( path.join( root, 'registry', 'data.json' ), JSON.stringify({
 		libraries: [{ id: 'alpha', name: 'Alpha', sources: [{ id: 'ci' }] }]
 	}) );
-	const records = [ '2026-08-30T00:00:00Z', '2026-08-31T00:00:00Z' ].map( ( timestamp, index ) => {
+	const records = [ '2026-08-30T02:33:08Z', '2026-08-31T12:03:30Z' ].map( ( timestamp, index ) => {
 		const executionTarget = { kind: 'cpu', runtime_version: index === 0 ? '3.1' : '3.2' };
 		const platform = {
 			description: index === 0 ? 'Linux glibc 2.38' : 'Linux glibc 2.39',
@@ -165,19 +164,22 @@ function unknownOutcomeDataRoot() {
 			series_key: 'sha256:'+ 'b'.repeat( 64 ),
 			series_schema: 'compliance-v1-series-v1',
 			source_id: 'ci',
-			summary: { collected: 2, passed: 1, total: 2, xfailed: 1 },
+			summary: index === 0 ?
+				{ collected: 3, passed: 2, total: 3, xfailed: 1 } :
+				{ collected: 3, failed: 1, passed: 1, total: 3, xfailed: 1 },
 			test_suite: 'c'.repeat( 40 ),
 			timestamp,
 			variant: { api_version: '2025.12', execution_target: executionTarget, platform, python },
 			variant_key: 'sha256:'+String( index + 3 ).repeat( 64 ),
 			variant_schema: 'compliance-v1-variant-v1',
-			version: '1.0.0'
+			version: index === 0 ? '1.0.0' : '2.0.0'
 		};
 	});
-	records.forEach( ( value ) => {
+	records.forEach( ( value, index ) => {
 		const envelope = { report: { data: { tests: [
 			{ nodeid: 'a', outcome: 'passed' },
-			{ nodeid: 'b', outcome: 'xfailed' }
+			{ nodeid: 'b', outcome: index === 0 ? 'passed' : 'failed' },
+			{ nodeid: 'c', outcome: 'xfailed' }
 		] } } };
 		fs.writeFileSync( path.join( root, 'data', value.path ), zlib.gzipSync( JSON.stringify( envelope ) ) );
 	});
@@ -232,32 +234,16 @@ function multiContextDataRoot() {
 	return root;
 }
 
-test( 'renders current data and all local routes', () => {
+test( 'builds current repository data and resolves every generated route', () => {
 	const output = build( '/' );
 	const homepage = read( output, 'index.html' );
-	assert.match( homepage, /1,352 of 1,382 tests passed/ );
-	assert.match( homepage, /97\.8%/ );
-	assert.match( homepage, /<li>Python 3\.14\.7<\/li>/ );
-	assert.match( homepage, /Linux 6\.17\.0-1022-azure x86_64<\/li>/ );
-	assert.match( homepage, /<li>CPU<\/li>/ );
-	assert.match( homepage, /<li>Source demo<\/li>/ );
-	assert.match( homepage, /Platform Linux-6\.17\.0-1022-azure-x86_64-with-glibc2\.39/ );
-	assert.match( homepage, /1 test changed from passed to failed/ );
-	assert.doesNotMatch( homepage, /aria-current="page"/ );
-	assert.doesNotMatch( homepage.match( /<nav class="top-nav"[\s\S]*?<\/nav>/ )[ 0 ], /Libraries/ );
-	[
-		'about/index.html',
-		'libraries/array-api-strict/index.html',
-		'libraries/array-api-strict/sources/demo/series/'+SERIES+'/index.html',
-		'libraries/array-api-strict/sources/demo/series/'+SERIES+'/history/index.html',
-		'libraries/array-api-strict/sources/demo/series/'+SERIES+'/failures/index.html'
-	].forEach( ( relative ) => assert.ok( fs.existsSync( path.join( output, relative ) ), relative ) );
+	assert.match( homepage, /<main class="dashboard-shell" id="main-content">/ );
+	assert.ok( fs.existsSync( path.join( output, 'about', 'index.html' ) ) );
 	assertInternalLinksResolve( output, '/' );
 	const files = fs.readdirSync( output, { recursive: true } ).map( String );
+	assert.ok( files.some( ( name ) => /(?:^|\/)libraries\/[^/]+\/index\.html$/.test( name ) ) );
+	assert.ok( files.some( ( name ) => /(?:^|\/)series\/[^/]+\/history\/index\.html$/.test( name ) ) );
 	assert.equal( files.some( ( name ) => /\.(?:gz|njk|js)$/.test( name ) ), false );
-	const failures = read( output, 'libraries/array-api-strict/sources/demo/series/'+SERIES+'/failures/index.html' );
-	assert.match( failures, /August 31, 2026 at 02:33:08 UTC/ );
-	assert.match( failures, /Platform Linux-6\.17\.0-1022-azure-x86_64-with-glibc2\.39/ );
 	const about = read( output, 'about/index.html' );
 	assert.match( about, /stable execution-target details: kind, backend, and device model/ );
 	assert.match( about, /identify a variant within that series/ );
@@ -265,7 +251,7 @@ test( 'renders current data and all local routes', () => {
 
 test( 'prefixes links for project Pages', () => {
 	const prefix = '/array-api-tests-compliance-data';
-	const output = build( prefix );
+	const output = build( prefix, syntheticDataRoot() );
 	const homepage = read( output, 'index.html' );
 	assert.match( homepage, /href="\/array-api-tests-compliance-data\/assets\/css\/site\.css"/ );
 	assertInternalLinksResolve( output, prefix );
@@ -293,9 +279,11 @@ test( 'renders one site-level state when no reports have been harvested', () => 
 	assert.doesNotMatch( homepage.match( /<nav class="top-nav"[\s\S]*?<\/nav>/ )[ 0 ], /Libraries/ );
 } );
 
-test( 'retains extension outcomes in comparison rows', () => {
+test( 'selects the newest synthetic run and retains extension outcomes', () => {
 	const output = build( '/', unknownOutcomeDataRoot() );
 	const homepage = read( output, 'index.html' );
+	assert.match( homepage, /<h2 id="library-result-title">Alpha <span>2\.0\.0<\/span><\/h2>/ );
+	assert.match( homepage, /1 of 3 tests passed/ );
 	assert.match( homepage, /comparison-outcomes[\s\S]*1 xfailed[\s\S]*comparison-row--current[\s\S]*1 xfailed/ );
 	assert.match( homepage, /<li>Python 3\.14\.2<\/li>/ );
 	assert.match( homepage, /Linux 6\.1 x86_64<\/li>/ );
@@ -304,6 +292,12 @@ test( 'retains extension outcomes in comparison rows', () => {
 	assert.match( homepage, /Python:<\/strong> previous 3\.14\.1; current 3\.14\.2/ );
 	assert.match( homepage, /Platform:<\/strong> previous Linux glibc 2\.38; current Linux glibc 2\.39/ );
 	assert.match( homepage, /Runtime version:<\/strong> previous 3\.1; current 3\.2/ );
+	const seriesRoot = 'libraries/alpha/sources/ci/series/'+ 'b'.repeat( 64 );
+	const failures = read( output, seriesRoot+'/failures/index.html' );
+	assert.match( failures, /August 31, 2026 at 12:03:30 UTC/ );
+	assert.match( failures, /Python 3\.14\.2 · Linux 6\.1 x86_64 · Platform Linux glibc 2\.39 · CPU · Runtime 3\.2/ );
+	const history = read( output, seriesRoot+'/history/index.html' );
+	assert.ok( history.indexOf( '2026-08-31T12:03:30Z' ) < history.indexOf( '2026-08-30T02:33:08Z' ) );
 } );
 
 test( 'marks a context as the current page only on its exact series route', () => {
