@@ -112,7 +112,8 @@ async function main() {
 		'registryPath': ( args.registry ) ? resolve( args.registry ) : void 0,
 		'dataDirectory': ( args.data_dir ) ? resolve( args.data_dir ) : void 0,
 		'outputDirectory': ( args.output_dir ) ? resolve( args.output_dir ) : void 0,
-		'baseSha': args.base_sha
+		'baseSha': args.base_sha,
+		'actionsSummaryPath': proc.env.GITHUB_STEP_SUMMARY
 	});
 	stored = result.summary.new_records.length;
 
