@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://data-apis.org/schemas/registry/v1.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "libraries"],
+  "properties": {
+    "schema": { "const": "registry-v1" },
+    "libraries": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/library" }
+    }
+  },
+  "$defs": {
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "maxLength": 80
+    },
+    "file": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\\\).+$"
+    },
+    "sourceBase": {
+      "type": "object",
+      "required": ["id", "type"],
+      "properties": {
+        "id": { "$ref": "#/$defs/slug" },
+        "type": { "type": "string" },
+        "file": { "$ref": "#/$defs/file" }
+      }
+    },
+    "githubSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "type", "provider", "project", "ref", "selector"],
+      "properties": {
+        "id": { "$ref": "#/$defs/slug" },
+        "type": { "const": "ci_artifact" },
+        "provider": { "const": "github" },
+        "project": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$",
+          "maxLength": 201
+        },
+        "ref": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "name"],
+          "properties": {
+            "kind": { "const": "branch" },
+            "name": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255,
+              "pattern": "^(?!/)(?!.*\\.\\.)(?!.*[~^:?*\\[\\]\\\\])(?!.*//$)(?!.*\\.$).+$"
+            }
+          }
+        },
+        "selector": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["workflow", "artifact"],
+          "properties": {
+            "workflow": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_.-]+\\.ya?ml$",
+              "maxLength": 255
+            },
+            "artifact": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255
+            }
+          }
+        },
+        "file": { "$ref": "#/$defs/file" }
+      }
+    },
+    "urlSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "type", "url"],
+      "properties": {
+        "id": { "$ref": "#/$defs/slug" },
+        "type": { "const": "url" },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://",
+          "maxLength": 2048
+        },
+        "file": { "$ref": "#/$defs/file" }
+      }
+    },
+    "source": {
+      "oneOf": [
+        { "$ref": "#/$defs/githubSource" },
+        { "$ref": "#/$defs/urlSource" }
+      ]
+    },
+    "library": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "sources"],
+      "properties": {
+        "id": { "$ref": "#/$defs/slug" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "report_name": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/source" }
+        }
+      }
+    }
+  }
+}

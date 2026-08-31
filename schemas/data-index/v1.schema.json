@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://data-apis.org/schemas/data-index/v1.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "records"],
+  "properties": {
+    "schema": { "const": "data-index-v1" },
+    "records": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/record" }
+    }
+  },
+  "$defs": {
+    "short": { "type": "string", "minLength": 1, "maxLength": 512 },
+    "long": { "type": "string", "minLength": 1, "maxLength": 16384 },
+    "slug": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$", "maxLength": 80 },
+    "origin": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "provider", "project"],
+          "properties": {
+            "type": { "const": "ci_artifact" },
+            "provider": { "$ref": "#/$defs/short" },
+            "project": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["id", "locator"],
+              "properties": {
+                "id": { "$ref": "#/$defs/short" },
+                "locator": { "$ref": "#/$defs/short" }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "endpoint"],
+          "properties": {
+            "type": { "const": "url" },
+            "endpoint": { "type": "string", "pattern": "^https://", "maxLength": 2048 }
+          }
+        }
+      ]
+    },
+    "record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["library_id", "source_id", "source_fingerprint", "series_schema", "series_key", "origin", "series", "timestamp", "path", "report_sha256", "version", "api_version", "python", "platform", "test_suite", "summary"],
+      "properties": {
+        "library_id": { "$ref": "#/$defs/slug" },
+        "source_id": { "$ref": "#/$defs/slug" },
+        "source_fingerprint": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+        "series_schema": { "const": "compliance-v1-series-v1" },
+        "series_key": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+        "origin": { "$ref": "#/$defs/origin" },
+        "series": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["api_version", "python", "platform"],
+          "properties": {
+            "api_version": { "$ref": "#/$defs/short" },
+            "python": { "$ref": "#/$defs/short" },
+            "platform": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["system", "machine"],
+              "properties": {
+                "system": { "$ref": "#/$defs/short" },
+                "machine": { "$ref": "#/$defs/short" }
+              }
+            }
+          }
+        },
+        "timestamp": { "type": "string", "minLength": 20, "maxLength": 40 },
+        "path": { "type": "string", "pattern": "^[a-z0-9-]+/[a-z0-9-]+/[0-9TZ_]+__sha256_[0-9a-f]{64}\\.json\\.gz$", "maxLength": 512 },
+        "report_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "version": { "$ref": "#/$defs/short" },
+        "api_version": { "$ref": "#/$defs/short" },
+        "python": { "$ref": "#/$defs/short" },
+        "platform": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["description", "system", "release", "machine"],
+          "properties": {
+            "description": { "$ref": "#/$defs/long" },
+            "system": { "$ref": "#/$defs/short" },
+            "release": { "$ref": "#/$defs/short" },
+            "machine": { "$ref": "#/$defs/short" }
+          }
+        },
+        "test_suite": { "type": "string", "pattern": "^[0-9a-fA-F]{40}$" },
+        "summary": {
+          "type": "object",
+          "required": ["total", "collected"],
+          "additionalProperties": { "type": "integer", "minimum": 0 }
+        }
+      }
+    }
+  }
+}

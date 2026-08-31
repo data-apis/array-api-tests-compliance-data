@@ -1,0 +1,139 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://data-apis.org/schemas/stored-record/v1.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "harvest", "report"],
+  "properties": {
+    "schema": { "const": "stored-record-v1" },
+    "harvest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["library_id", "source_id", "source_fingerprint", "series_schema", "series_key", "retrieved_at", "report_sha256", "origin"],
+      "properties": {
+        "library_id": { "$ref": "#/$defs/slug" },
+        "source_id": { "$ref": "#/$defs/slug" },
+        "source_fingerprint": { "$ref": "#/$defs/sha256Prefixed" },
+        "series_schema": { "const": "compliance-v1-series-v1" },
+        "series_key": { "$ref": "#/$defs/sha256Prefixed" },
+        "retrieved_at": { "type": "string", "minLength": 20, "maxLength": 40 },
+        "report_sha256": { "$ref": "#/$defs/sha256" },
+        "origin": {
+          "oneOf": [
+            { "$ref": "#/$defs/ciOrigin" },
+            { "$ref": "#/$defs/urlOrigin" }
+          ]
+        }
+      }
+    },
+    "report": { "type": "object" }
+  },
+  "$defs": {
+    "slug": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$", "maxLength": 80 },
+    "short": { "type": "string", "minLength": 1, "maxLength": 512 },
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "sha256Prefixed": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["format"],
+      "properties": {
+        "format": { "enum": ["json", "zip"] },
+        "member": { "type": "string", "minLength": 1, "maxLength": 512 }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "format": { "const": "zip" } } },
+          "then": { "required": ["member"] },
+          "else": { "not": { "required": ["member"] } }
+        }
+      ]
+    },
+    "ciOrigin": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "provider", "project", "ref", "run", "artifact", "payload"],
+      "properties": {
+        "type": { "const": "ci_artifact" },
+        "provider": { "type": "string", "pattern": "^[a-z][a-z0-9_-]*$", "maxLength": 40 },
+        "project": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["id", "locator"],
+          "properties": {
+            "id": { "$ref": "#/$defs/short" },
+            "locator": { "$ref": "#/$defs/short" }
+          }
+        },
+        "ref": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "name"],
+          "properties": {
+            "kind": { "$ref": "#/$defs/short" },
+            "name": { "$ref": "#/$defs/short" }
+          }
+        },
+        "run": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["id"],
+          "properties": {
+            "id": { "$ref": "#/$defs/short" },
+            "revision": { "$ref": "#/$defs/short" }
+          }
+        },
+        "artifact": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["name"],
+          "properties": {
+            "id": { "$ref": "#/$defs/short" },
+            "name": { "$ref": "#/$defs/short" }
+          }
+        },
+        "payload": { "$ref": "#/$defs/payload" },
+        "provider_details": { "type": "object" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "provider": { "const": "github" } } },
+          "then": {
+            "properties": {
+              "provider_details": { "$ref": "#/$defs/githubProviderDetails" }
+            }
+          },
+          "else": { "not": { "required": ["provider_details"] } }
+        }
+      ]
+    },
+    "githubProviderDetails": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "workflow": { "$ref": "#/$defs/short" },
+        "run_attempt": { "type": "integer", "minimum": 1 },
+        "artifact_created_at": { "$ref": "#/$defs/short" },
+        "artifact_digest": { "$ref": "#/$defs/sha256Prefixed" }
+      }
+    },
+    "urlOrigin": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "endpoint", "payload"],
+      "properties": {
+        "type": { "const": "url" },
+        "endpoint": { "type": "string", "pattern": "^https://", "maxLength": 2048 },
+        "response": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "etag": { "$ref": "#/$defs/short" },
+            "last_modified": { "$ref": "#/$defs/short" }
+          }
+        },
+        "payload": { "$ref": "#/$defs/payload" }
+      }
+    }
+  }
+}
