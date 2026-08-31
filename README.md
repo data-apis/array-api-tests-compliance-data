@@ -13,7 +13,7 @@ The test suite compliance dashboard is comprised of two parts:
 
 ## Registration
 
-If you are the maintainer of an array library adopting the Array API standard and would like submit test suite results, you're in the right place!
+If you are the maintainer of an array library adopting the Array API standard and would like to submit test suite results, you're in the right place!
 
 To add your library, please do the following:
 
@@ -23,7 +23,7 @@ To add your library, please do the following:
 
 3.  Add a new entry to the `libraries` field and include the following data:
 
-    -   **id**: unique identifier (e.g., `numpy`, `array-api-strict`, etc). This is an immutable registry identifier. Changing an identifer creates a new history, so renames should be deliberate migrations.
+    -   **id**: unique identifier (e.g., `numpy`, `array-api-strict`, etc). This is an immutable registry identifier. Changing an identifier creates a new history, so renames should be deliberate migrations.
 
     -   **name**: human-readable display name (e.g., `NumPy`, `Array API Strict`, etc).
 
@@ -38,7 +38,7 @@ To add your library, please do the following:
 
         -   **url**: URL for the published artifact(s) (e.g., `'https://example.org/array-api-compliance/latest.json'`). Non-HTTPS URLs are not supported. Credentials should not be embedded in URLs.
 
-        if `type` is `ci_artifact`, then a source object must have the following fields:
+        If `type` is `ci_artifact`, then a source object must have the following fields:
 
         -   **provider**: name of the CI provider hosting the artifact. Currently, only `'github'` is supported.
 
@@ -54,9 +54,11 @@ To add your library, please do the following:
             -   **workflow**: workflow filename.
             -   **artifact**: artifact name.
             
+        -   **file**: specific file member within a published ZIP archive. This applies to both `url` and `ci_artifact` sources. _(optional)_
+            
 4.  Open a PR against this repository which adds the registration entry. Once merged, automated workflows will begin monitoring the registration endpoint(s).
 
-5.  Setup your library to begin publishing test suite results. See below.
+5.  Set up your library to begin publishing test suite results. See below.
 
 ### Examples
 
@@ -64,7 +66,7 @@ To add your library, please do the following:
 
 The following is an example registration entry for a GitHub workflow artifact:
 
-```js
+```json
 {
   "id": "array-api-strict",
   "name": "Array API Strict",
@@ -90,7 +92,7 @@ The following is an example registration entry for a GitHub workflow artifact:
 
 #### URL
 
-```js
+```json
 {
   "id": "array-api-strict",
   "name": "Array API Strict",
@@ -119,11 +121,11 @@ cd array-api-tests && ARRAY_API_TESTS_MODULE="array_api_strict" ARRAY_API_TESTS_
 
 See the test suite for further information concerning test suite configuration.
 
-Once the raw report is generated, you need to augment the generated JSON with additional meta data with the following fields:
+Once the raw report is generated, you need to augment the generated JSON with additional metadata having the following fields:
 
 -   **schema**: report schema version (e.g., `v1`).
 
--   **name**: array library name. This **must** match the registration `name`, as discussed above.
+-   **name**: array library name. This **must** match the registration `report_name`, as discussed above.
 
 -   **version**: array library version. This is the version of your library against which the test suite ran.
 
@@ -138,33 +140,36 @@ Once the raw report is generated, you need to augment the generated JSON with ad
     -   **machine**: machine type as returned by `platform.machine()` (e.g., `x86_64`).
     -   **system**: operating system as returned by `platform.system()` (e.g., `Linux`).
     
--   **execution_target**: an object containing the follow fields:
+-   **execution_target**: an object containing the following fields:
 
     -   **kind**: execution target kind. Must be one of the following: `'cpu'`, `'gpu'`, `'tpu'`, or `'other'`.
     
-    If `kind` is not `cpu`, the following additional fields are required:
+    If `kind` is not `cpu`, the following additional field is required:
 
-    -   **backend**: backend name.
+    -   **backend**: backend name. Must be lowercase.
+    
+    If `kind` is not `cpu`, the following additional fields are optional:
+
     -   **device_model**: device model.
     -   **runtime_version**: runtime version.
     -   **driver_version**: driver version.
     
--   **python**: Python version as returned by `platform.python_version()` (e.g., `3.14`).
+-   **python**: Python version as returned by `platform.python_version()` (e.g., `3.14.7`).
 
--   **test_suite**: test suite revision as an exact commit SHA.
+-   **test_suite**: test suite revision as an exact 40-character hexadecimal commit SHA.
 
 -   **data**: test suite result object containing the following fields, all of which can be obtained from the raw test suite report JSON:
 
     -   **duration**: test suite execution duration.
-    -   **exitcode**: test suite exit code.
-    -   **summary**: test suite summary, including the number of failed, skipped, and passing tests, along with the total.
-    -   **tests**: array containing individual test suite results.
+    -   **exitcode**: test suite exit code. Must be either `0` or `1`.
+    -   **summary**: test suite summary, including the number of collected, failed, skipped, and passing tests, along with the total.
+    -   **tests**: array containing individual test suite results. The number of individual tests **must** agree with the test suite summary.
     
 #### Example
 
 The following is an example test suite report:
 
-```js
+```json
 {
   "schema": "v1",
   "name": "array-api-strict",
@@ -209,13 +214,16 @@ To publish test suite results using GitHub workflows, consult the [demonstration
 
 When publishing test suite results to a public URL, you should always publish to the same static URL (e.g., `latest.json`), as it will be that single endpoint which is queried for the latest test suite results.
 
-Upon harvesting, automated workflows in this repository will determine whether the downloaded artifact has already been harvested based on the artifact's checksum.
+Upon harvesting, automated workflows in this repository will determine whether the downloaded artifact has already been harvested after extraction, normalization, and a computed checksum.
 
 * * *
 
 ## Notes
 
 -   Artifacts may be published as an individual test suite report JSON file or a ZIP file containing one or more JSON files.
+-   External repositories are **not** required to install a GitHub App or provide credentials. GitHub workflow artifacts must be published on **public** GitHub repositories.
+-   For authoritative registry and compliance schemas, see the [`schemas`](https://github.com/data-apis/array-api-tests-compliance-data/tree/main/schemas) directory.
+-   Test suite results are stored in the [`data`](https://github.com/data-apis/array-api-tests-compliance-data/tree/main/data) directory as compressed records. [`data/index.json`](https://github.com/data-apis/array-api-tests-compliance-data/blob/main/data/index.json) provides a record index, along with summarized test suite results.
 
 * * *
 
