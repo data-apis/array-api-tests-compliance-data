@@ -1,0 +1,33 @@
+{
+  "name": "array-api-tests-compliance-data",
+  "version": "0.0.0",
+  "private": true,
+  "engines": {
+    "node": ">=22.2.0"
+  },
+  "scripts": {
+    "harvest": "node scripts/harvest.js",
+    "test": "node --test test/*.test.js",
+    "validate": "node scripts/validate_repository.js --all"
+  },
+  "dependencies": {
+    "@stdlib/array-base-map": "^0.1.1",
+    "@stdlib/assert-is-array": "^0.2.3",
+    "@stdlib/assert-is-boolean": "^0.2.3",
+    "@stdlib/assert-is-object": "^0.2.3",
+    "@stdlib/boolean-ctor": "^0.2.3",
+    "@stdlib/buffer-from-string": "^0.2.3",
+    "@stdlib/fs-read-file": "^0.2.3",
+    "@stdlib/object-ctor": "^0.2.2",
+    "@stdlib/process-argv": "^0.2.2",
+    "@stdlib/streams-node-stderr": "^0.2.3",
+    "@stdlib/streams-node-stdout": "^0.2.3",
+    "@stdlib/string-format": "^0.2.3",
+    "@stdlib/string-replace": "^0.2.3",
+    "@stdlib/utils-from-entries": "^0.2.3",
+    "@stdlib/utils-keys": "^0.2.3",
+    "@stdlib/utils-parse-json": "^0.2.3",
+    "ajv": "8.20.0",
+    "yauzl": "3.4.0"
+  }
+}
