@@ -70,11 +70,13 @@ tmp/
 *.7z
 *.dmg
 *.gz
+!data/**/*.json.gz
 *.iso
 *.jar
 *.rar
 *.tar
 *.zip
+!test/fixtures/*.zip
 
 # Logs and databases #
 ######################
