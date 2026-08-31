@@ -1,0 +1,35 @@
+{
+  "schema": "v1",
+  "name": "array-api-strict",
+  "version": "2.6.1",
+  "api_version": "2025.12",
+  "timestamp": "2026-08-24T10:34:27Z",
+  "platform": {
+    "description": "Linux-test-x86_64",
+    "system": "Linux",
+    "release": "test",
+    "machine": "x86_64"
+  },
+  "python": "3.14.7",
+  "test_suite": "05b12afc0811fdac80028bc0454d6ca0aefb8101",
+  "data": {
+    "duration": 1.5,
+    "exitcode": 1,
+    "summary": {
+      "passed": 1,
+      "failed": 1,
+      "total": 2,
+      "collected": 2
+    },
+    "tests": [
+      {
+        "nodeid": "array_api_tests/test_demo.py::test_pass",
+        "outcome": "passed"
+      },
+      {
+        "nodeid": "array_api_tests/test_demo.py::test_fail",
+        "outcome": "failed"
+      }
+    ]
+  }
+}
