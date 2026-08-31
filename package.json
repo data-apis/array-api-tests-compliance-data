@@ -7,7 +7,7 @@
   },
   "scripts": {
     "harvest": "node scripts/harvest.js",
-    "test": "node --test test/*.test.js",
+    "test": "node --test test/**/*.test.js",
     "validate": "node scripts/validate_repository.js --all"
   },
   "dependencies": {
