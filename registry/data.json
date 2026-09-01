@@ -7,16 +7,16 @@
       "report_name": "array-api-strict",
       "sources": [
         {
-          "id": "demo",
+          "id": "array-api-strict-ci",
           "type": "ci_artifact",
           "provider": "github",
-          "project": "data-apis/array-api-tests-compliance-data",
+          "project": "data-apis/array-api-strict",
           "ref": {
             "kind": "branch",
             "name": "main"
           },
           "selector": {
-            "workflow": "demo.yml",
+            "workflow": "report-compliance.yml",
             "artifact": "array_api_compliance.json"
           }
         }
