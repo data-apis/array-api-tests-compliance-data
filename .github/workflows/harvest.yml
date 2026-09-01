@@ -117,6 +117,19 @@ jobs:
       - name: 'Validate existing repository data'
         run: npm run validate
 
+      - name: 'Verify external GitHub token'
+        env:
+          HARVEST_GITHUB_TOKEN: ${{ secrets.HARVEST_GITHUB_TOKEN }}
+        run: |
+          curl --fail-with-body \
+            --silent \
+            --show-error \
+            --output /dev/null \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${HARVEST_GITHUB_TOKEN}" \
+            -H "X-GitHub-Api-Version: 2026-03-10" \
+            https://api.github.com/user
+
       # Retrieve artifacts from registered sources:
       - name: 'Harvest test suite reports'
         env:
