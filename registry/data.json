@@ -2,27 +2,6 @@
   "schema": "registry-v1",
   "libraries": [
     {
-      "id": "array-api-strict-demo",
-      "name": "Array API Strict Demo",
-      "report_name": "array-api-strict-demo",
-      "sources": [
-        {
-          "id": "demo",
-          "type": "ci_artifact",
-          "provider": "github",
-          "project": "data-apis/array-api-tests-compliance-data",
-          "ref": {
-            "kind": "branch",
-            "name": "main"
-          },
-          "selector": {
-            "workflow": "demo.yml",
-            "artifact": "array_api_compliance.json"
-          }
-        }
-      ]
-    },
-    {
       "id": "array-api-strict",
       "name": "Array API Strict",
       "report_name": "array-api-strict",
