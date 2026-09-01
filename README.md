@@ -21,7 +21,7 @@ If you are an array library maintainer wanting to report Array API test suite re
 For array libraries already using GitHub workflows for running their test suites (including against the Array API test suite), see the [demonstration](https://github.com/data-apis/array-api-tests-compliance-data/blob/main/.github/workflows/demo.yml) GitHub workflow for how to run the test suite and generate a valid test suite report JSON.
 
 > [!NOTE]
-> The [demonstration](https://github.com/data-apis/array-api-tests-compliance-data/blob/main/.github/workflows/demo.yml) GitHub workflow is configured to test the [`array_api_strict`](https://github.com/data-apis/array-api-strict) library on a cron schedule; however, using a cron schedule is not a requirement for test suite reporting. You are free to run the test suite on whatever schedule and/or triggers make sense for your library (e.g., on `push`, etc). We do ask, however, that you only report test suite results for your main branch, thus reflecting the code that your users will actually run.
+> The [demonstration](https://github.com/data-apis/array-api-tests-compliance-data/blob/main/.github/workflows/demo.yml) GitHub workflow is configured to test the [`array_api_strict`](https://github.com/data-apis/array-api-strict) library on a cron schedule; however, using a cron schedule is not a requirement for test suite reporting. You are free to run the test suite on whatever schedule and/or triggers make sense for your library (e.g., on `push`, etc). We do ask, however, that you only report test suite results for tests running against your main branch, thus reflecting the code that your users will actually run.
 
 * * *
 
