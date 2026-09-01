@@ -13,7 +13,7 @@ The test suite compliance dashboard is comprised of two parts:
 
 ## Quick Start
 
-If you are an array library wanting to report your Array API test suite results, you need to do two things:
+If you are an array library maintainer wanting to report Array API test suite results, you need to do two things:
 
 1.  Set up a public endpoint from which your test suite results can be regularly retrieved. This can be a GitHub workflow artifact, a public URL, or some other supported endpoint mechanism.
 2.  Register your library's public endpoint(s) with this repository. See **Registration** below.
