@@ -74,9 +74,14 @@ To add your library, please do the following:
             
         -   **file**: specific file member within a published ZIP archive to use as a test suite result. Other files within the ZIP archive are ignored. _(optional)_
             
-4.  Open a PR against this repository which adds the registration entry. Once merged, automated workflows will begin monitoring the registration endpoint(s).
+4.  Set up your library to begin publishing test suite results. See below concerning [**Test Suite Artifacts**](#test-suite-artifacts).
 
-5.  Set up your library to begin publishing test suite results. See below concerning [**Test Suite Artifacts**](#test-suite-artifacts).
+5.  Open a PR against this repository which adds the registration entry. Once merged, automated workflows will begin monitoring the registration endpoint(s) and pulling the **latest** published artifact on a daily basis.
+
+6.  Check back on the [dashboard](https://data-apis.org/array-api-tests-compliance-data/) within **24-48** hours. If all went according to plan, your library should be displayed in the dashboard alongside other registered array libraries.
+
+> [!NOTE]
+> There may be a 24-48 hour lag between when an array library registers with this repository and when test suite results start appearing in the dashboard. This is expected and stems from the fact that this repository polls registered array library endpoints once every **24** hours.
 
 ### Examples
 
