@@ -18,10 +18,10 @@ If you are an array library maintainer wanting to report Array API test suite re
 1.  Set up a public endpoint from which your test suite results can be regularly retrieved. This can be a GitHub workflow artifact, a public URL, or some other supported endpoint mechanism.
 2.  Register your library's public endpoint(s) with this repository. See **Registration** below.
 
-For array libraries already running the Array API test suite using GitHub workflows, see the [`demo.yml`](https://github.com/data-apis/array-api-tests-compliance-data/blob/main/.github/workflows/demo.yml) GitHub workflow for how to run the test suite and generate a valid test suite report JSON.
+For array libraries already using GitHub workflows for running their test suites (including against the Array API test suite), see the [demonstration](https://github.com/data-apis/array-api-tests-compliance-data/blob/main/.github/workflows/demo.yml) GitHub workflow for how to run the test suite and generate a valid test suite report JSON.
 
 > [!NOTE]
-> The [`demo.yml`](https://github.com/data-apis/array-api-tests-compliance-data/blob/main/.github/workflows/demo.yml) GitHub workflow is configured to run the [`array_api_strict`](https://github.com/data-apis/array-api-strict) library on a cron schedule; however, that is not a requirement for test suite reporting. You are free to run the test suite on whatever schedule and/or triggers make sense for your library (e.g., on `push`, etc). We do ask, however, that you only report test suite results for your main branch, thus reflecting the code that your users will actually run.
+> The [demonstration](https://github.com/data-apis/array-api-tests-compliance-data/blob/main/.github/workflows/demo.yml) GitHub workflow is configured to test the [`array_api_strict`](https://github.com/data-apis/array-api-strict) library on a cron schedule; however, using a cron schedule is not a requirement for test suite reporting. You are free to run the test suite on whatever schedule and/or triggers make sense for your library (e.g., on `push`, etc). We do ask, however, that you only report test suite results for your main branch, thus reflecting the code that your users will actually run.
 
 * * *
 
