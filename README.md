@@ -13,10 +13,11 @@ The test suite compliance dashboard is comprised of two parts:
 
 ## Quick Start
 
-If you are an array library maintainer wanting to report Array API test suite results, you need to do two things:
+If you are an array library maintainer wanting to report Array API test suite results, you need to do three things:
 
 1.  Set up a public endpoint from which your test suite results can be regularly retrieved. This can be a GitHub workflow artifact, a public URL, or some other supported endpoint mechanism.
 2.  Register your library's public endpoint(s) with this repository. See [**Registration**](#registration) below.
+3.  Once your library is registered, check back within **24-48** hours to confirm that the [dashboard](https://data-apis.org/array-api-tests-compliance-data/) is displaying test suite results for your library.
 
 For array libraries already using GitHub workflows for running their test suites (including against the Array API test suite), see the [demonstration](https://github.com/data-apis/array-api-tests-compliance-data/blob/main/.github/workflows/demo.yml) GitHub workflow for how to run the test suite and generate a valid test suite report JSON.
 
