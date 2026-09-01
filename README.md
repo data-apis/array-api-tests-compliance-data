@@ -16,7 +16,7 @@ The test suite compliance dashboard is comprised of two parts:
 If you are an array library maintainer wanting to report Array API test suite results, you need to do two things:
 
 1.  Set up a public endpoint from which your test suite results can be regularly retrieved. This can be a GitHub workflow artifact, a public URL, or some other supported endpoint mechanism.
-2.  Register your library's public endpoint(s) with this repository. See **Registration** below.
+2.  Register your library's public endpoint(s) with this repository. See [**Registration**](#registration) below.
 
 For array libraries already using GitHub workflows for running their test suites (including against the Array API test suite), see the [demonstration](https://github.com/data-apis/array-api-tests-compliance-data/blob/main/.github/workflows/demo.yml) GitHub workflow for how to run the test suite and generate a valid test suite report JSON.
 
@@ -24,6 +24,8 @@ For array libraries already using GitHub workflows for running their test suites
 > The [demonstration](https://github.com/data-apis/array-api-tests-compliance-data/blob/main/.github/workflows/demo.yml) GitHub workflow is configured to test the [`array_api_strict`](https://github.com/data-apis/array-api-strict) library on a cron schedule; however, using a cron schedule is not a requirement for test suite reporting. You are free to run the test suite on whatever schedule and/or triggers make sense for your library (e.g., on `push`, etc). We do ask, however, that you only report test suite results for your main branch, thus reflecting the code that your users will actually run.
 
 * * *
+
+<a name="registration"></a>
 
 ## Registration
 
@@ -74,7 +76,7 @@ To add your library, please do the following:
             
 4.  Open a PR against this repository which adds the registration entry. Once merged, automated workflows will begin monitoring the registration endpoint(s).
 
-5.  Set up your library to begin publishing test suite results. See below concerning **Test Suite Artifacts**.
+5.  Set up your library to begin publishing test suite results. See below concerning [**Test Suite Artifacts**](#test-suite-artifacts).
 
 ### Examples
 
@@ -157,7 +159,7 @@ Once the raw report is generated, you need to augment the generated JSON with ad
 
 -   **schema**: report schema version (e.g., `v1`).
 
--   **name**: array library name. This **must** match the registration `report_name`, as discussed above.
+-   **name**: array library name. This **must** match the registration `report_name`, as discussed above for registering an array library (see [**Registration**](#registration)).
 
 -   **version**: array library version. This is the version of your library against which the test suite ran.
 
