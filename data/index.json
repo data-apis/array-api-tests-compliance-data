@@ -3,6 +3,70 @@
   "records": [
     {
       "library_id": "array-api-strict",
+      "source_id": "array-api-strict-ci",
+      "source_fingerprint": "sha256:1fb9133422784521dffdee75c9dc60474b22056f756bdbe92060531f0863900f",
+      "series_schema": "compliance-v1-series-v1",
+      "series_key": "sha256:825a99e02cebb16f439f25d8b634b3f18ab37ec5ce95c857f63500ece3778441",
+      "variant_schema": "compliance-v1-variant-v1",
+      "variant_key": "sha256:ba176962943009191602956364b068118870b857262c34be137bf7ceab56b4bf",
+      "origin": {
+        "type": "ci_artifact",
+        "provider": "github",
+        "project": {
+          "id": "746846856",
+          "locator": "data-apis/array-api-strict"
+        }
+      },
+      "series": {
+        "api_version": "2025.12",
+        "python": "3.14",
+        "platform": {
+          "system": "Linux",
+          "machine": "x86_64"
+        },
+        "execution_target": {
+          "kind": "cpu"
+        }
+      },
+      "variant": {
+        "api_version": "2025.12",
+        "python": "3.14.7",
+        "platform": {
+          "description": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+          "system": "Linux",
+          "release": "6.17.0-1022-azure",
+          "machine": "x86_64"
+        },
+        "execution_target": {
+          "kind": "cpu"
+        }
+      },
+      "timestamp": "2026-08-31T19:03:16Z",
+      "path": "array-api-strict/array-api-strict-ci/2026_08_31T19_03_16Z__sha256_4a324131bd2e292657b6bb479d6a318d3b55e75a89fc1a9a582c57ba9659a1dd.json.gz",
+      "report_sha256": "4a324131bd2e292657b6bb479d6a318d3b55e75a89fc1a9a582c57ba9659a1dd",
+      "version": "2.6.1",
+      "api_version": "2025.12",
+      "python": "3.14.7",
+      "platform": {
+        "description": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+        "system": "Linux",
+        "release": "6.17.0-1022-azure",
+        "machine": "x86_64"
+      },
+      "execution_target": {
+        "kind": "cpu"
+      },
+      "test_suite": "05b12afc0811fdac80028bc0454d6ca0aefb8101",
+      "summary": {
+        "passed": 1351,
+        "skipped": 5,
+        "failed": 26,
+        "total": 1382,
+        "collected": 1382
+      }
+    },
+    {
+      "library_id": "array-api-strict",
       "source_id": "demo",
       "source_fingerprint": "sha256:60e5433590fb86ec2330d2b7b1866cb59b5299776d5410e5b49f1c94a209763b",
       "series_schema": "compliance-v1-series-v1",
