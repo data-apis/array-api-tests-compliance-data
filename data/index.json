@@ -64,6 +64,70 @@
         "total": 1382,
         "collected": 1382
       }
+    },
+    {
+      "library_id": "array-api-strict",
+      "source_id": "array-api-strict-ci",
+      "source_fingerprint": "sha256:1fb9133422784521dffdee75c9dc60474b22056f756bdbe92060531f0863900f",
+      "series_schema": "compliance-v1-series-v1",
+      "series_key": "sha256:825a99e02cebb16f439f25d8b634b3f18ab37ec5ce95c857f63500ece3778441",
+      "variant_schema": "compliance-v1-variant-v1",
+      "variant_key": "sha256:ba176962943009191602956364b068118870b857262c34be137bf7ceab56b4bf",
+      "origin": {
+        "type": "ci_artifact",
+        "provider": "github",
+        "project": {
+          "id": "746846856",
+          "locator": "data-apis/array-api-strict"
+        }
+      },
+      "series": {
+        "api_version": "2025.12",
+        "python": "3.14",
+        "platform": {
+          "system": "Linux",
+          "machine": "x86_64"
+        },
+        "execution_target": {
+          "kind": "cpu"
+        }
+      },
+      "variant": {
+        "api_version": "2025.12",
+        "python": "3.14.7",
+        "platform": {
+          "description": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+          "system": "Linux",
+          "release": "6.17.0-1022-azure",
+          "machine": "x86_64"
+        },
+        "execution_target": {
+          "kind": "cpu"
+        }
+      },
+      "timestamp": "2026-09-01T08:52:55Z",
+      "path": "array-api-strict/array-api-strict-ci/2026_09_01T08_52_55Z__sha256_67f8fa13387ee3c3fa9eeb72bca4fb46e732d6486c706d73280bb1037e801daf.json.gz",
+      "report_sha256": "67f8fa13387ee3c3fa9eeb72bca4fb46e732d6486c706d73280bb1037e801daf",
+      "version": "2.6.1",
+      "api_version": "2025.12",
+      "python": "3.14.7",
+      "platform": {
+        "description": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+        "system": "Linux",
+        "release": "6.17.0-1022-azure",
+        "machine": "x86_64"
+      },
+      "execution_target": {
+        "kind": "cpu"
+      },
+      "test_suite": "05b12afc0811fdac80028bc0454d6ca0aefb8101",
+      "summary": {
+        "passed": 1350,
+        "failed": 27,
+        "skipped": 5,
+        "total": 1382,
+        "collected": 1382
+      }
     }
   ]
 }
