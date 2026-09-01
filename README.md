@@ -155,7 +155,10 @@ cd array-api-tests && \
 
 See the test suite for further information concerning test suite configuration.
 
-Once the raw report is generated, you need to augment the generated JSON with additional metadata having the following fields (see the [demonstration](https://github.com/data-apis/array-api-tests-compliance-data/blob/8582ba41369ba9c22420881c2f61bb87a33bb0dc/.github/workflows/demo.yml#L125) workflow for an example of including metadata with the raw report):
+Once the raw report is generated, you need to augment the generated JSON with additional metadata having the following fields:
+
+> ![TIP]
+> See the [demonstration](https://github.com/data-apis/array-api-tests-compliance-data/blob/8582ba41369ba9c22420881c2f61bb87a33bb0dc/.github/workflows/demo.yml#L125) workflow for an example of including metadata with the raw report.
 
 -   **schema**: report schema version (e.g., `v1`).
 
