@@ -21,6 +21,41 @@
           }
         }
       ]
+    },
+    {
+      "id": "numpy-fork",
+      "name": "NumPy fork",
+      "report_name": "numpy-fork",
+      "sources": [
+        {
+          "id": "numpy-fork-linux",
+          "type": "ci_artifact",
+          "provider": "github",
+          "project": "ev-br/numpy",
+          "ref": {
+            "kind": "branch",
+            "name": "main"
+          },
+          "selector": {
+            "workflow": "report-compliance.yml",
+            "artifact": "array_api_compliance-ubuntu-latest.json"
+          }
+        },
+        {
+          "id": "numpy-fork-macos",
+          "type": "ci_artifact",
+          "provider": "github",
+          "project": "ev-br/numpy",
+          "ref": {
+            "kind": "branch",
+            "name": "main"
+          },
+          "selector": {
+            "workflow": "report-compliance.yml",
+            "artifact": "array_api_compliance-ubuntu-latest.json"
+          }
+        }
+      ]
     }
   ]
 }
