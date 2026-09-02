@@ -52,7 +52,7 @@
           },
           "selector": {
             "workflow": "report-compliance.yml",
-            "artifact": "array_api_compliance-ubuntu-latest.json"
+            "artifact": "array_api_compliance-macos-14.json"
           }
         }
       ]
