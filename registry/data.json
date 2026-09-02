@@ -37,7 +37,7 @@
             "name": "main"
           },
           "selector": {
-            "workflow": "report-compliance.yml",
+            "workflow": "array-api-report.yml",
             "artifact": "array_api_compliance-ubuntu-latest.json"
           }
         },
@@ -51,7 +51,7 @@
             "name": "main"
           },
           "selector": {
-            "workflow": "report-compliance.yml",
+            "workflow": "array-api-report.yml",
             "artifact": "array_api_compliance-macos-14.json"
           }
         }
