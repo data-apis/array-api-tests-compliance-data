@@ -192,6 +192,134 @@
         "total": 1382,
         "collected": 1382
       }
+    },
+    {
+      "library_id": "numpy-fork",
+      "source_id": "numpy-fork-linux",
+      "source_fingerprint": "sha256:e213ffe691df6c97fe3f3da17d079310dfde64d16d6a1c85a0d1e723265d614b",
+      "series_schema": "compliance-v1-series-v1",
+      "series_key": "sha256:dc94b3dc79cad6b461c19ac785b68ab0599551650256026aa89135bdcb1e3e90",
+      "variant_schema": "compliance-v1-variant-v1",
+      "variant_key": "sha256:35c26baf281fa1aaa3cccbfd0de9bd71a1d18c5b96d54a71aab3af2ba1ec6127",
+      "origin": {
+        "type": "ci_artifact",
+        "provider": "github",
+        "project": {
+          "id": "45295770",
+          "locator": "ev-br/numpy"
+        }
+      },
+      "series": {
+        "api_version": "2025.12",
+        "python": "3.12",
+        "platform": {
+          "system": "Linux",
+          "machine": "x86_64"
+        },
+        "execution_target": {
+          "kind": "cpu"
+        }
+      },
+      "variant": {
+        "api_version": "2025.12",
+        "python": "3.12.14",
+        "platform": {
+          "description": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+          "system": "Linux",
+          "release": "6.17.0-1022-azure",
+          "machine": "x86_64"
+        },
+        "execution_target": {
+          "kind": "cpu"
+        }
+      },
+      "timestamp": "2026-09-02T03:38:59Z",
+      "path": "numpy-fork/numpy-fork-linux/2026_09_02T03_38_59Z__sha256_5a54f689564f9d974c9655eee3f3d1c2320d07968e7dd5293ad0907020edafb8.json.gz",
+      "report_sha256": "5a54f689564f9d974c9655eee3f3d1c2320d07968e7dd5293ad0907020edafb8",
+      "version": "2.6.0.dev0",
+      "api_version": "2025.12",
+      "python": "3.12.14",
+      "platform": {
+        "description": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+        "system": "Linux",
+        "release": "6.17.0-1022-azure",
+        "machine": "x86_64"
+      },
+      "execution_target": {
+        "kind": "cpu"
+      },
+      "test_suite": "b6a9d9f40899885fa041ba14f1a92c48d1952218",
+      "summary": {
+        "passed": 1337,
+        "failed": 44,
+        "skipped": 5,
+        "total": 1386,
+        "collected": 1386
+      }
+    },
+    {
+      "library_id": "numpy-fork",
+      "source_id": "numpy-fork-macos",
+      "source_fingerprint": "sha256:f1a1ba574b49576fbc4184e6ddc84b99af4850eb687754c906f62788a0115817",
+      "series_schema": "compliance-v1-series-v1",
+      "series_key": "sha256:a22081a61e9a69cbc73e10c10396120cbe318b115a87a659e7b09c2c1fd08ee2",
+      "variant_schema": "compliance-v1-variant-v1",
+      "variant_key": "sha256:b29d41b60f78269c5f1c1283d3039796f86cab5cf9436c7dbe59674d7c8eb163",
+      "origin": {
+        "type": "ci_artifact",
+        "provider": "github",
+        "project": {
+          "id": "45295770",
+          "locator": "ev-br/numpy"
+        }
+      },
+      "series": {
+        "api_version": "2025.12",
+        "python": "3.12",
+        "platform": {
+          "system": "Darwin",
+          "machine": "arm64"
+        },
+        "execution_target": {
+          "kind": "cpu"
+        }
+      },
+      "variant": {
+        "api_version": "2025.12",
+        "python": "3.12.10",
+        "platform": {
+          "description": "macOS-14.8.7-arm64-arm-64bit",
+          "system": "Darwin",
+          "release": "23.6.0",
+          "machine": "arm64"
+        },
+        "execution_target": {
+          "kind": "cpu"
+        }
+      },
+      "timestamp": "2026-09-02T03:35:52Z",
+      "path": "numpy-fork/numpy-fork-macos/2026_09_02T03_35_52Z__sha256_1ac7ed88aefda216c066c778c10c5e79679abacb65a9c5b8a4ad558db6ae1700.json.gz",
+      "report_sha256": "1ac7ed88aefda216c066c778c10c5e79679abacb65a9c5b8a4ad558db6ae1700",
+      "version": "2.6.0.dev0",
+      "api_version": "2025.12",
+      "python": "3.12.10",
+      "platform": {
+        "description": "macOS-14.8.7-arm64-arm-64bit",
+        "system": "Darwin",
+        "release": "23.6.0",
+        "machine": "arm64"
+      },
+      "execution_target": {
+        "kind": "cpu"
+      },
+      "test_suite": "b6a9d9f40899885fa041ba14f1a92c48d1952218",
+      "summary": {
+        "passed": 1331,
+        "skipped": 5,
+        "failed": 50,
+        "total": 1386,
+        "collected": 1386
+      }
     }
   ]
 }
