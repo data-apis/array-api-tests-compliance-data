@@ -56,6 +56,27 @@
           }
         }
       ]
+    },
+    {
+      "id": "mparray",
+      "name": "MPArray",
+      "report_name": "mparray",
+      "sources": [
+        {
+          "id": "mparray-ci",
+          "type": "ci_artifact",
+          "provider": "github",
+          "project": "mdhaber/mparray",
+          "ref": {
+            "kind": "branch",
+            "name": "main"
+          },
+          "selector": {
+            "workflow": "report-compliance.yml",
+            "artifact": "array_api_compliance-mparray.json"
+          }
+        }
+      ]
     }
   ]
 }
