@@ -2370,6 +2370,70 @@
       }
     },
     {
+      "library_id": "array-api-strict",
+      "source_id": "array-api-strict-ci",
+      "source_fingerprint": "sha256:1fb9133422784521dffdee75c9dc60474b22056f756bdbe92060531f0863900f",
+      "series_schema": "compliance-v1-series-v1",
+      "series_key": "sha256:825a99e02cebb16f439f25d8b634b3f18ab37ec5ce95c857f63500ece3778441",
+      "variant_schema": "compliance-v1-variant-v1",
+      "variant_key": "sha256:23cbaa5dc807e509cdcd5fba47ad569d61d7bcd678194e229207f852833b1eaa",
+      "origin": {
+        "type": "ci_artifact",
+        "provider": "github",
+        "project": {
+          "id": "746846856",
+          "locator": "data-apis/array-api-strict"
+        }
+      },
+      "series": {
+        "api_version": "2025.12",
+        "python": "3.14",
+        "platform": {
+          "system": "Linux",
+          "machine": "x86_64"
+        },
+        "execution_target": {
+          "kind": "cpu"
+        }
+      },
+      "variant": {
+        "api_version": "2025.12",
+        "python": "3.14.8",
+        "platform": {
+          "description": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+          "system": "Linux",
+          "release": "6.17.0-1022-azure",
+          "machine": "x86_64"
+        },
+        "execution_target": {
+          "kind": "cpu"
+        }
+      },
+      "timestamp": "2026-10-08T18:08:29Z",
+      "path": "array-api-strict/array-api-strict-ci/2026_10_08T18_08_29Z__sha256_340f0783e596615b8473b6d3f9db08e443131b66ee08271837d0ce589bddf1be.json.gz",
+      "report_sha256": "340f0783e596615b8473b6d3f9db08e443131b66ee08271837d0ce589bddf1be",
+      "version": "2.6.1",
+      "api_version": "2025.12",
+      "python": "3.14.8",
+      "platform": {
+        "description": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+        "system": "Linux",
+        "release": "6.17.0-1022-azure",
+        "machine": "x86_64"
+      },
+      "execution_target": {
+        "kind": "cpu"
+      },
+      "test_suite": "6c0b59f9ecd654f0c356614f2e421c9993f676d2",
+      "summary": {
+        "passed": 1350,
+        "failed": 27,
+        "skipped": 5,
+        "total": 1382,
+        "collected": 1382
+      }
+    },
+    {
       "library_id": "mparray",
       "source_id": "mparray-ci",
       "source_fingerprint": "sha256:d62d9132a23c8ba06d16f38a0a81fac6053e1fa19115fd12e1fe177794080955",
@@ -4867,6 +4931,70 @@
     },
     {
       "library_id": "numpy-fork",
+      "source_id": "numpy-fork-linux",
+      "source_fingerprint": "sha256:e213ffe691df6c97fe3f3da17d079310dfde64d16d6a1c85a0d1e723265d614b",
+      "series_schema": "compliance-v1-series-v1",
+      "series_key": "sha256:dc94b3dc79cad6b461c19ac785b68ab0599551650256026aa89135bdcb1e3e90",
+      "variant_schema": "compliance-v1-variant-v1",
+      "variant_key": "sha256:769f767f893d5561709a010f47e029b5231c73a513a62ed3ac4a02e9c2958e51",
+      "origin": {
+        "type": "ci_artifact",
+        "provider": "github",
+        "project": {
+          "id": "45295770",
+          "locator": "ev-br/numpy"
+        }
+      },
+      "series": {
+        "api_version": "2025.12",
+        "python": "3.12",
+        "platform": {
+          "system": "Linux",
+          "machine": "x86_64"
+        },
+        "execution_target": {
+          "kind": "cpu"
+        }
+      },
+      "variant": {
+        "api_version": "2025.12",
+        "python": "3.12.15",
+        "platform": {
+          "description": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+          "system": "Linux",
+          "release": "6.17.0-1022-azure",
+          "machine": "x86_64"
+        },
+        "execution_target": {
+          "kind": "cpu"
+        }
+      },
+      "timestamp": "2026-10-08T18:35:02Z",
+      "path": "numpy-fork/numpy-fork-linux/2026_10_08T18_35_02Z__sha256_a325b9427a0012726fee5a54fdce011e61b86ff4cb4e22c549e4ac09136c5c1f.json.gz",
+      "report_sha256": "a325b9427a0012726fee5a54fdce011e61b86ff4cb4e22c549e4ac09136c5c1f",
+      "version": "2.6.0.dev0",
+      "api_version": "2025.12",
+      "python": "3.12.15",
+      "platform": {
+        "description": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+        "system": "Linux",
+        "release": "6.17.0-1022-azure",
+        "machine": "x86_64"
+      },
+      "execution_target": {
+        "kind": "cpu"
+      },
+      "test_suite": "6c0b59f9ecd654f0c356614f2e421c9993f676d2",
+      "summary": {
+        "passed": 1338,
+        "skipped": 5,
+        "failed": 43,
+        "total": 1386,
+        "collected": 1386
+      }
+    },
+    {
+      "library_id": "numpy-fork",
       "source_id": "numpy-fork-macos",
       "source_fingerprint": "sha256:f1a1ba574b49576fbc4184e6ddc84b99af4850eb687754c906f62788a0115817",
       "series_schema": "compliance-v1-series-v1",
@@ -7165,6 +7293,70 @@
         "passed": 1329,
         "failed": 52,
         "skipped": 5,
+        "total": 1386,
+        "collected": 1386
+      }
+    },
+    {
+      "library_id": "numpy-fork",
+      "source_id": "numpy-fork-macos",
+      "source_fingerprint": "sha256:f1a1ba574b49576fbc4184e6ddc84b99af4850eb687754c906f62788a0115817",
+      "series_schema": "compliance-v1-series-v1",
+      "series_key": "sha256:a22081a61e9a69cbc73e10c10396120cbe318b115a87a659e7b09c2c1fd08ee2",
+      "variant_schema": "compliance-v1-variant-v1",
+      "variant_key": "sha256:5444e2ea64bf4ff20857d31523e015e29860f20307ed6c90a0d48e0b7e7179c0",
+      "origin": {
+        "type": "ci_artifact",
+        "provider": "github",
+        "project": {
+          "id": "45295770",
+          "locator": "ev-br/numpy"
+        }
+      },
+      "series": {
+        "api_version": "2025.12",
+        "python": "3.12",
+        "platform": {
+          "system": "Darwin",
+          "machine": "arm64"
+        },
+        "execution_target": {
+          "kind": "cpu"
+        }
+      },
+      "variant": {
+        "api_version": "2025.12",
+        "python": "3.12.10",
+        "platform": {
+          "description": "macOS-14.8.9-arm64-arm-64bit",
+          "system": "Darwin",
+          "release": "23.6.0",
+          "machine": "arm64"
+        },
+        "execution_target": {
+          "kind": "cpu"
+        }
+      },
+      "timestamp": "2026-10-08T18:32:41Z",
+      "path": "numpy-fork/numpy-fork-macos/2026_10_08T18_32_41Z__sha256_6f3f6c40bc19710c453ee2ab8ed7167788c8c482299cc0ff936954a79b2a70e5.json.gz",
+      "report_sha256": "6f3f6c40bc19710c453ee2ab8ed7167788c8c482299cc0ff936954a79b2a70e5",
+      "version": "2.6.0.dev0",
+      "api_version": "2025.12",
+      "python": "3.12.10",
+      "platform": {
+        "description": "macOS-14.8.9-arm64-arm-64bit",
+        "system": "Darwin",
+        "release": "23.6.0",
+        "machine": "arm64"
+      },
+      "execution_target": {
+        "kind": "cpu"
+      },
+      "test_suite": "6c0b59f9ecd654f0c356614f2e421c9993f676d2",
+      "summary": {
+        "passed": 1331,
+        "skipped": 5,
+        "failed": 50,
         "total": 1386,
         "collected": 1386
       }
